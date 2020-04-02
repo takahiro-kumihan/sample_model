@@ -9,6 +9,20 @@ app.set("port", process.env.PORT || 3000);
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+// for MODEL
+// require MONGOOSE and Collection
+const mongoose = require("mongoose");
+mongoose.connect("mongodb://localhost:27017/form", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+// const db = mongoose.connection;
+// db.once("open", () => {
+//   console.log("Mongoose connected to MongoDB!")
+// });
+// for Promise
+mongoose.Promise = global.Promise;
+
 // for Assets
 // app.use(express.static("assets"));
 
@@ -19,17 +33,17 @@ app.use(layouts);
 
 // Difine Path
 // for controller
-const formCtl = require("./controllers/formCtl");
+const contactCtl = require("./controllers/contactCtl");
 // for ROOT
 app.get("/", (req, res) => {
   res.send("Here is ROOT!")
 });
 // for Contact
-app.get("/contact_post", formCtl.postForm);
-app.get("/contact_save", formCtl.saveForm);
+app.get("/contact_post", contactCtl.postContact);
+app.post("/contact_save", contactCtl.saveContact);
 app.get("/contact_get",
-         formCtl.getForm, (req, res) => {
-           res.render("contact_get", { Contact, req.data });
+         contactCtl.getContact, (req, res) => {
+           res.render("contact_get", { Contact: req.data });
          });
 
 // Listen Server
