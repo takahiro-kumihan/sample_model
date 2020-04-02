@@ -1,15 +1,15 @@
 // require MODEL
 const Contact = require("../models/contact");
 // POST
-exports.postForm = (req, res) => {
+exports.postContact = (req, res) => {
 	res.render("contact_post");
 };
 // SAVE
-exports.saveForm = (req, res) => {
+exports.saveContact = (req, res) => {
 	let newContact = new Contact({
 		name: req.body.name,
 		email: req.body.email,
-		contents: req.body.contents
+		content: req.body.content
 	});
 	newContact.save()
 		.then(ins => {
@@ -22,7 +22,7 @@ exports.saveForm = (req, res) => {
 		});
 };
 // GET
-exports.saveForm = (req, res) => {
+exports.getContact = (req, res) => {
 	Contact.find({})
 		.exec()
 		.then(ins => {

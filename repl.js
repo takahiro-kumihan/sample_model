@@ -39,10 +39,10 @@ mongoose.Promise = global.Promise;
 //   .then(console.log(`${ query.name }さんのドキュメントを削除しました。`))
 //   .catch(error => console.log(error));
 
-// deleteManyメソッド
-Contact.deleteMany({})
-  .then(items => console.log(`${ items.n }件全てのドキュメントを削除しました。`))
-  .catch(error => console.log(error));
+// // deleteManyメソッド
+// Contact.deleteMany({})
+//   .then(items => console.log(`${ items.n }件全てのドキュメントを削除しました。`))
+//   .catch(error => console.log(error));
 
 // ドキュメント生成メソッド
 // Contact.create(
