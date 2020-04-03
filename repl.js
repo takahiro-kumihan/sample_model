@@ -1,48 +1,109 @@
 const mongoose = require("mongoose");
 const User = require("./models/user");
+const Course = require("./models/course");
 
 mongoose.connect(
-  "mongodb://localhost:27017/contact",
+  "mongodb://localhost:27017/kumihan_site",
   { useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true }
 );
 
+var tmpUser,
+    tmpCourse;
+
 mongoose.Promise = global.Promise;
 
-/////////////////////////////////////////////
-User.find({})
-  // .exec()
-  .then(query => {
-    query.forEach(i => console.log(i.name))
-  });
+//////////////////////////////////////////////////////////////////////////
+// アソシエーしょ　応用バージョン
+User.deleteMany({})
+  .then(ins => console.log(`\n>> ${ins.n}のドキュメントを破棄しました。`))
+  .then(() => {
+    return Course.deleteMany({});
+  })
+  .then(ins => console.log(`>> ${ins.n}のドキュメントを破棄しました。`))
+  .then(() => {
+    return User.create({ name: "nob", email: "nob@email.com", c_code: 331 });
+  })
+  .then(User => {
+    console.log(
+      `>> Userモデルのドキュメント\n>> ${User.getInfo()}\n>> を生成しました。`
+    );
+  })
+  .then(() => {
+    return User.findOne({ name: "nob" });
+  })
+  .then(ins => {
+    tmpUser = ins;
+    console.log(`>> 検索したユーザーは\n>> ${ins.getInfo()}`);
+  })
+  .then(() => {
+    return Course.create({
+      title: "中世史",
+      description: "日本の中世史を6ヶ月間で学ぶコースです。",
+      c_code: 331,
+      hint: ["平清盛", "足利義満"]
+    });
+  })
+  .then(ins => {
+    tmpCourse = ins;
+    console.log(`>> ${ins.title}コースを生成しました。`);
+  })
+  .then(() => {
+    tmpUser.courses.push(tmpCourse);
+    tmpUser.save();
+  })
+  .then(() => {
+    return User.populate(tmpUser, "courses");
+  })
+  .then(ins => console.log(ins))
+  .then(() => {
+    return User.find({
+      courses: mongoose.Types.ObjectId(tmpCourse._id)
+    });
+  })
+  .then(ins => console.log(ins))
+  .catch(error => console.log(error));
 
-/////////////////////////////////////////////
-// モデルで定義したインスタンスメソッドを試す
-findOne
-User.findOne({ email: "nob@j-email.com" })
-  .then(result => {
-    console.log(result.getInfo());
-  });
 
-// //////////////////////////////////////// ERRORが解決できない！
-// findUsers
-// User.findUsers();
-// => Uncaught TypeError: User.findUser is not a function
+// ////////////////////////////////////////////////
+// // アソシエーション まず、失敗してるやつ。
+// var tmpCourse, tmpUser;
 
-////////////////////////////////////////////
-// クラスメソッドを試す
-User.findUsers(319, (error, result) => {
-  if (!error) {
-    console.log(result);
-  }
-});
+// // Course.create({
+// //     title: "西洋史",
+// //     description: "西洋史をドイツ中心に解説",
+// //     c_code: 319,
+// //     hint: ["フリードリッヒ2世", "ゲーテ"]
+// //   })
+// //   .then(ins => tmpCourse = ins);
+  
+// User.findOne({}).then(ins => tmpUser = ins);
+// // UserモデルのcoursesPARSMS => coursesメソッド
+// tmpUser.courses.push(tmpCourse);
+// tmpUser.save();
+// User.populate(tmpUser, "courses")
+//   .then(ins => console.log(ins));
 
-User.findUsers({ zip_code: 319 }, (error, result) => {
-  if (!error) {
-    console.log(result);
-  }
-});
+// // 複数のコースを該当者に割り当てたいよね。
+// // サンプルだと一つのコースを該当者に割り当てていくようだけど。。。？
+//   // Course.create({
+//   //     title: "日本中世史",
+//   //     description: "日本の中世史を院政を中心に解説",
+//   //     c_code: 331
+//   //   },{
+//   //     title: "西洋史",
+//   //     description: "西洋史をドイツ中心に解説",
+//   //     c_code: 319
+//   //   },{
+//   //     title: "家政",
+//   //     description: "料理について解説",
+//   //     c_code: 626
+//   //   })
+//   //   .then(ins => tmpCourse = ins);
+  
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////
@@ -81,40 +142,46 @@ User.findUsers({ zip_code: 319 }, (error, result) => {
 
 // ドキュメント生成メソッド
 // User.create(
+//   { name: "nob",
+//     email: "nob@email.com",
+//     c_code: 331 })
+//   .then(ins => console.log(ins))
+//   .catch(error => console.log(error));
+
+// User.create(
 //   {
 //     name: "mair",
 //     email: "mari@email.com",
-//     c_code: 0319
+//     c_code: 319
 //   },
 //   {
 //     name: "kaz",
 //     email: "kaz@email.com",
-//     c_code: 0626
+//     c_code: 626
 //   },
 //   {
 //     name: "nob",
 //     email: "nob@email.com",
-//     c_code: 0331
-//   },
+//     c_code: 331
+//   })
+//   .then(ins => console.log(ins))
+//   .catch(error => console.log(error));
+
+// User.create(
 //   {
-//     name: "高広　茉李",
-//     email: "mari@j-email.com",
-//     c_code: 0319
-//   },
-//   {
-//     name: "高広　信之",
+//     name: "高広信之",
 //     email: "nob@j-email.com",
-//     c_code: 0331
+//     c_code: 331
 //   },
 //   {
-//     name: "高広　和恵",
-//     email: "kaz-t@j-email.com",
-//     c_code: 0626
+//     name: "高広和恵",
+//     email: "kaz@j-email.com",
+//     c_code: 626
 //   },
 //   {
-//     name: "吉田　和恵",
-//     email: "kaz-y@j-email.com",
-//     c_code: 0626
+//     name: "高広茉李",
+//     email: "mari@j-email.com",
+//     c_code: 319
 //   })
 //   .then(ins => console.log(ins))
 //   .catch(error => console.log(error));
@@ -141,3 +208,37 @@ User.findUsers({ zip_code: 319 }, (error, result) => {
 // // コールバック
 // // setTimeout関数の引数にlog関数を渡し、
 // // setTimeoutからlogを呼び出すこと。
+
+// //////////////////////////////////////// ERRORが解決できない！
+// User.find({})
+//   // .exec()
+//   .then(query => {
+//     query.forEach(i => console.log(i.name))
+//   });
+
+// /////////////////////////////////////////////
+// // モデルで定義したインスタンスメソッドを試す
+// // findOne
+// User.findOne({ email: /nob/ })
+//   .then(result => {
+//     console.log(result.getInfo());
+//   });
+
+// //////////////////////////////////////// ERRORの出るメソッド
+// // findUsers
+// User.findLocalUsers();
+// => Uncaught TypeError: User.findUser is not a function
+
+// ////////////////////////////////////////////
+// // クラスメソッドを試す
+// User.findUsers(319, (error, result) => {
+//   if (!error) {
+//     console.log(result);
+//   }
+// });
+
+// User.findUsers({ zip_code: 319 }, (error, result) => {
+//   if (!error) {
+//     console.log(result);
+//   }
+// });
