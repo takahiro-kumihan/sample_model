@@ -1,85 +1,187 @@
 const mongoose = require("mongoose");
-const Contact = require("./models/contact");
+const User = require("./models/user");
+const Course = require("./models/course");
 
 mongoose.connect(
-  "mongodb://localhost:27017/contact",
+  "mongodb://localhost:27017/kumihan_site",
   { useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true }
 );
 
+var tmpUser,
+    tmpCourse;
+
 mongoose.Promise = global.Promise;
 
+//////////////////////////////////////////////////////////////////////////
+// アソシエーしょ　応用バージョン
+User.deleteMany({})
+  .then(ins => console.log(`\n>> ${ins.n}のドキュメントを破棄しました。`))
+  .then(() => {
+    return Course.deleteMany({});
+  })
+  .then(ins => console.log(`>> ${ins.n}のドキュメントを破棄しました。`))
+  .then(() => {
+    return User.create({ name: "nob", email: "nob@email.com", c_code: 331 });
+  })
+  .then(User => {
+    console.log(
+      `>> Userモデルのドキュメント\n>> ${User.getInfo()}\n>> を生成しました。`
+    );
+  })
+  .then(() => {
+    return User.findOne({ name: "nob" });
+  })
+  .then(ins => {
+    tmpUser = ins;
+    console.log(`>> 検索したユーザーは\n>> ${ins.getInfo()}`);
+  })
+  .then(() => {
+    return Course.create({
+      title: "中世史",
+      description: "日本の中世史を6ヶ月間で学ぶコースです。",
+      c_code: 331,
+      hint: ["平清盛", "足利義満"]
+    });
+  })
+  .then(ins => {
+    tmpCourse = ins;
+    console.log(`>> ${ins.title}コースを生成しました。`);
+  })
+  .then(() => {
+    tmpUser.courses.push(tmpCourse);
+    tmpUser.save();
+  })
+  .then(() => {
+    return User.populate(tmpUser, "courses");
+  })
+  .then(ins => console.log(ins))
+  .then(() => {
+    return User.find({
+      courses: mongoose.Types.ObjectId(tmpCourse._id)
+    });
+  })
+  .then(ins => console.log(ins))
+  .catch(error => console.log(error));
+
+
+// ////////////////////////////////////////////////
+// // アソシエーション まず、失敗してるやつ。
+// var tmpCourse, tmpUser;
+
+// // Course.create({
+// //     title: "西洋史",
+// //     description: "西洋史をドイツ中心に解説",
+// //     c_code: 319,
+// //     hint: ["フリードリッヒ2世", "ゲーテ"]
+// //   })
+// //   .then(ins => tmpCourse = ins);
+  
+// User.findOne({}).then(ins => tmpUser = ins);
+// // UserモデルのcoursesPARSMS => coursesメソッド
+// tmpUser.courses.push(tmpCourse);
+// tmpUser.save();
+// User.populate(tmpUser, "courses")
+//   .then(ins => console.log(ins));
+
+// // 複数のコースを該当者に割り当てたいよね。
+// // サンプルだと一つのコースを該当者に割り当てていくようだけど。。。？
+//   // Course.create({
+//   //     title: "日本中世史",
+//   //     description: "日本の中世史を院政を中心に解説",
+//   //     c_code: 331
+//   //   },{
+//   //     title: "西洋史",
+//   //     description: "西洋史をドイツ中心に解説",
+//   //     c_code: 319
+//   //   },{
+//   //     title: "家政",
+//   //     description: "料理について解説",
+//   //     c_code: 626
+//   //   })
+//   //   .then(ins => tmpCourse = ins);
+  
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+
+
 /////////////////////////////////////////////
-// ここから命令
+// 定型命令
 
 // // findメソッド（合致するものを配列で返す）
-// Contact.find({ email: /mari/ })
+// User.find({ email: /mari/ })
 //   .then(result => console.log(result))
 //   .catch(error => console.log(error));
 
 // // findOneメソッド
 // // notice: namaパラメーターをuniqueでvalidateした上で、フルネームで検索しないとダメなメソッド。
-// Contact.findOne({ name: /和恵/ })
+// User.findOne({ name: /和恵/ })
 //   .then(result => console.log(result))
 //   .catch(error => console.log(error));
   
 // // findByIdメソッド
-// Contact.findById("5e856bbcb8bb911767345593")
+// User.findById("5e856bbcb8bb911767345593")
 //   .then(result =>
 //     console.log(
-//       `name: ${result.name}, email: ${result.email}, content: ${result.content}`
+//       `name: ${result.name}, email: ${result.email}, c_code: 0331
 //     )
 //   )
 //   .catch(error => console.log(error));
 
 // // deleteOneメソッド
 // const query = { name: "kaz" };
-// Contact.deleteOne(query)
+// User.deleteOne(query)
 //   .then(console.log(`${ query.name }さんのドキュメントを削除しました。`))
 //   .catch(error => console.log(error));
 
 // // deleteManyメソッド
-// Contact.deleteMany({})
+// User.deleteMany({})
 //   .then(items => console.log(`${ items.n }件全てのドキュメントを削除しました。`))
 //   .catch(error => console.log(error));
 
 // ドキュメント生成メソッド
-// Contact.create(
+// User.create(
+//   { name: "nob",
+//     email: "nob@email.com",
+//     c_code: 331 })
+//   .then(ins => console.log(ins))
+//   .catch(error => console.log(error));
+
+// User.create(
 //   {
 //     name: "mair",
 //     email: "mari@email.com",
-//     content: "mari, hello!"
+//     c_code: 319
 //   },
 //   {
 //     name: "kaz",
 //     email: "kaz@email.com",
-//     content: "kaz, hello!"
+//     c_code: 626
 //   },
 //   {
 //     name: "nob",
 //     email: "nob@email.com",
-//     content: "nob, hello!"
-//   },
+//     c_code: 331
+//   })
+//   .then(ins => console.log(ins))
+//   .catch(error => console.log(error));
+
+// User.create(
 //   {
-//     name: "高広　茉李",
-//     email: "mari@j-email.com",
-//     content: "茉李, hello!"
-//   },
-//   {
-//     name: "高広　信之",
+//     name: "高広信之",
 //     email: "nob@j-email.com",
-//     content: "信之, hello!"
+//     c_code: 331
 //   },
 //   {
-//     name: "高広　和恵",
-//     email: "kaz-t@j-email.com",
-//     content: "和恵, hello!"
+//     name: "高広和恵",
+//     email: "kaz@j-email.com",
+//     c_code: 626
 //   },
 //   {
-//     name: "吉田　和恵",
-//     email: "kaz-y@j-email.com",
-//     content: "和恵, hello!"
+//     name: "高広茉李",
+//     email: "mari@j-email.com",
+//     c_code: 319
 //   })
 //   .then(ins => console.log(ins))
 //   .catch(error => console.log(error));
@@ -106,3 +208,37 @@ mongoose.Promise = global.Promise;
 // // コールバック
 // // setTimeout関数の引数にlog関数を渡し、
 // // setTimeoutからlogを呼び出すこと。
+
+// //////////////////////////////////////// ERRORが解決できない！
+// User.find({})
+//   // .exec()
+//   .then(query => {
+//     query.forEach(i => console.log(i.name))
+//   });
+
+// /////////////////////////////////////////////
+// // モデルで定義したインスタンスメソッドを試す
+// // findOne
+// User.findOne({ email: /nob/ })
+//   .then(result => {
+//     console.log(result.getInfo());
+//   });
+
+// //////////////////////////////////////// ERRORの出るメソッド
+// // findUsers
+// User.findLocalUsers();
+// => Uncaught TypeError: User.findUser is not a function
+
+// ////////////////////////////////////////////
+// // クラスメソッドを試す
+// User.findUsers(319, (error, result) => {
+//   if (!error) {
+//     console.log(result);
+//   }
+// });
+
+// User.findUsers({ zip_code: 319 }, (error, result) => {
+//   if (!error) {
+//     console.log(result);
+//   }
+// });
