@@ -33,17 +33,17 @@ app.use(layouts);
 
 // Difine Path
 // for controller
-const contactCtl = require("./controllers/contactCtl");
+const usersCtl = require("./controllers/usersCtl");
 // for ROOT
 app.get("/", (req, res) => {
   res.send("Here is ROOT!")
 });
-// for Contact
-app.get("/contact_post", contactCtl.postContact);
-app.post("/contact_save", contactCtl.saveContact);
-app.get("/contact_get",
-         contactCtl.getContact, (req, res) => {
-           res.render("contact_get", { Contact: req.data });
+// for User
+app.get("/user_post", usersCtl.postUser);
+app.post("/user_save", usersCtl.saveUser);
+app.get("/user_gets",
+         usersCtl.getUser, (req, res) => {
+           res.render("user_gets", { User: req.data });
          });
 
 // Listen Server

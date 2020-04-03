@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Contact = require("./models/contact");
+const User = require("./models/user");
 
 mongoose.connect(
   "mongodb://localhost:27017/contact",
@@ -11,75 +11,110 @@ mongoose.connect(
 mongoose.Promise = global.Promise;
 
 /////////////////////////////////////////////
-// ここから命令
+User.find({})
+  // .exec()
+  .then(query => {
+    query.forEach(i => console.log(i.name))
+  });
+
+/////////////////////////////////////////////
+// モデルで定義したインスタンスメソッドを試す
+findOne
+User.findOne({ email: "nob@j-email.com" })
+  .then(result => {
+    console.log(result.getInfo());
+  });
+
+// //////////////////////////////////////// ERRORが解決できない！
+// findUsers
+// User.findUsers();
+// => Uncaught TypeError: User.findUser is not a function
+
+////////////////////////////////////////////
+// クラスメソッドを試す
+User.findUsers(319, (error, result) => {
+  if (!error) {
+    console.log(result);
+  }
+});
+
+User.findUsers({ zip_code: 319 }, (error, result) => {
+  if (!error) {
+    console.log(result);
+  }
+});
+
+
+/////////////////////////////////////////////
+// 定型命令
 
 // // findメソッド（合致するものを配列で返す）
-// Contact.find({ email: /mari/ })
+// User.find({ email: /mari/ })
 //   .then(result => console.log(result))
 //   .catch(error => console.log(error));
 
 // // findOneメソッド
 // // notice: namaパラメーターをuniqueでvalidateした上で、フルネームで検索しないとダメなメソッド。
-// Contact.findOne({ name: /和恵/ })
+// User.findOne({ name: /和恵/ })
 //   .then(result => console.log(result))
 //   .catch(error => console.log(error));
   
 // // findByIdメソッド
-// Contact.findById("5e856bbcb8bb911767345593")
+// User.findById("5e856bbcb8bb911767345593")
 //   .then(result =>
 //     console.log(
-//       `name: ${result.name}, email: ${result.email}, content: ${result.content}`
+//       `name: ${result.name}, email: ${result.email}, c_code: 0331
 //     )
 //   )
 //   .catch(error => console.log(error));
 
 // // deleteOneメソッド
 // const query = { name: "kaz" };
-// Contact.deleteOne(query)
+// User.deleteOne(query)
 //   .then(console.log(`${ query.name }さんのドキュメントを削除しました。`))
 //   .catch(error => console.log(error));
 
 // // deleteManyメソッド
-// Contact.deleteMany({})
+// User.deleteMany({})
 //   .then(items => console.log(`${ items.n }件全てのドキュメントを削除しました。`))
 //   .catch(error => console.log(error));
 
 // ドキュメント生成メソッド
-// Contact.create(
+// User.create(
 //   {
 //     name: "mair",
 //     email: "mari@email.com",
-//     content: "mari, hello!"
+//     c_code: 0319
 //   },
 //   {
 //     name: "kaz",
 //     email: "kaz@email.com",
-//     content: "kaz, hello!"
+//     c_code: 0626
 //   },
 //   {
 //     name: "nob",
 //     email: "nob@email.com",
-//     content: "nob, hello!"
+//     c_code: 0331
 //   },
 //   {
 //     name: "高広　茉李",
 //     email: "mari@j-email.com",
-//     content: "茉李, hello!"
+//     c_code: 0319
 //   },
 //   {
 //     name: "高広　信之",
 //     email: "nob@j-email.com",
-//     content: "信之, hello!"
+//     c_code: 0331
 //   },
 //   {
 //     name: "高広　和恵",
 //     email: "kaz-t@j-email.com",
-//     content: "和恵, hello!"
+//     c_code: 0626
 //   },
 //   {
 //     name: "吉田　和恵",
 //     email: "kaz-y@j-email.com",
-//     content: "和恵, hello!"
+//     c_code: 0626
 //   })
 //   .then(ins => console.log(ins))
 //   .catch(error => console.log(error));
