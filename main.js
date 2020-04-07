@@ -12,7 +12,7 @@ app.use(express.json());
 // for MODEL
 // require MONGOOSE and Collection
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost:27017/kumihan_site", {
+mongoose.connect("mongodb://localhost:27017/sample_model", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true
