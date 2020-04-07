@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
-
+const Schema = mongoose.Schema;
 // Schema
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
   name:  { type: String,
            reqired: true },
   email: { type: String,
@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
   c_code: { type:Number,
             min: [100, "Course code too short!"],
             max: 999 },
-  courses: [{ type: mongoose.Schema.Types.ObjectId,
+  courses: [{ type: Schema.Types.ObjectId,
              ref: "Course" }]
 });
 

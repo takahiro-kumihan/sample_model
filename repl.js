@@ -1,69 +1,188 @@
+// ////////////////////////////////////////////////////////////////
+// const mongoose = require("mongoose");
+
+// mongoose.connect(
+//   "mongodb://localhost:27017/sample_model",
+//   {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//     useCreateIndex: true
+//   }
+//   );
+ 
+// const Schema = mongoose.Schema;
+
+// const personSchema = Schema({
+//   _id: Schema.Types.ObjectId,
+//   name: String,
+//   age: Number,
+//   stories: [{ type: Schema.Types.ObjectId, ref: 'Story' }]
+// });
+
+// const storySchema = Schema({
+//   author: { type: Schema.Types.ObjectId, ref: 'Person' },
+//   title: String,
+//   fans: [{ type: Schema.Types.ObjectId, ref: 'Person' }]
+// });
+
+// const Story = mongoose.model('Story', storySchema);
+// const Person = mongoose.model('Person', personSchema);
+
+// const author = new Person({
+//   _id: new mongoose.Types.ObjectId(),
+//   name: 'Ian Fleming',
+//   age: 50
+// });
+
+// author.save(function (err) {
+//   if (err) return handleError(err);
+
+//   const story1 = new Story({
+//     title: 'Casino Royale',
+//     author: author._id    // assign the _id from the person
+//   });
+
+//   story1.save(function (err) {
+//     if (err) return handleError(err);
+//     return console.log("thats it!");
+//   });
+// });
+
+// Story.
+//   findOne({ title: 'Casino Royale' }).
+//   populate('author').
+//   exec(function (err, story) {
+//     if (err) return handleError(err);
+//     console.log(`The author is ${ story.author.name }`);
+//     console.log(story);
+// });
+
+////////////////////////////////////////////////////////////////////
 const mongoose = require("mongoose");
 const User = require("./models/user");
 const Course = require("./models/course");
 
 mongoose.connect(
-  "mongodb://localhost:27017/kumihan_site",
+  "mongodb://localhost:27017/sample_model",
   { useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true }
 );
 
-var tmpUser,
-    tmpCourse;
-
 mongoose.Promise = global.Promise;
 
-//////////////////////////////////////////////////////////////////////////
-// アソシエーしょ　応用バージョン
 User.deleteMany({})
-  .then(ins => console.log(`\n>> ${ins.n}のドキュメントを破棄しました。`))
+  .then(user => console.log(`\n>${ user.n }個のデータを削除しました。`))
   .then(() => {
     return Course.deleteMany({});
   })
-  .then(ins => console.log(`>> ${ins.n}のドキュメントを破棄しました。`))
+  .then(course => console.log(`>${ course.n }個のデータを削除しました。`))
   .then(() => {
-    return User.create({ name: "nob", email: "nob@email.com", c_code: 331 });
+    return User.create(
+      {
+        name: "高広信之",
+        email: "nob@j-email.com",
+        c_code: 331
+      },
+      {
+        name: "高広和恵",
+        email: "kaz@j-email.com",
+        c_code: 626
+      },
+      {
+        name: "高広茉李",
+        email: "mari@j-email.com",
+        c_code: 319
+      })
+      .then(user => tmpUser = user)
+    })
+    .then(() => {
+      return Course.create({
+        title: "日本中世史",
+        description: "日本の中世史を院政を中心に解説",
+        c_code: 331
+      }, {
+        title: "西洋史",
+        description: "西洋史をドイツ中心に解説",
+        c_code: 319
+      }, {
+        title: "家政",
+        description: "料理について解説",
+        c_code: 626
+      })
+      .then(course => tmpCourse = course)
   })
-  .then(User => {
-    console.log(
-      `>> Userモデルのドキュメント\n>> ${User.getInfo()}\n>> を生成しました。`
-    );
+  .then(tmpUser.forEach(user => {
+        return console.log(user.c_code);
   })
   .then(() => {
-    return User.findOne({ name: "nob" });
+    course => user.courses.push(course);
+    user.save();
+    User.populate(tmpUser, "courses") 
   })
-  .then(ins => {
-    tmpUser = ins;
-    console.log(`>> 検索したユーザーは\n>> ${ins.getInfo()}`);
-  })
+  .then(user => console.log(user))
   .then(() => {
-    return Course.create({
-      title: "中世史",
-      description: "日本の中世史を6ヶ月間で学ぶコースです。",
-      c_code: 331,
-      hint: ["平清盛", "足利義満"]
-    });
-  })
-  .then(ins => {
-    tmpCourse = ins;
-    console.log(`>> ${ins.title}コースを生成しました。`);
-  })
-  .then(() => {
-    tmpUser.courses.push(tmpCourse);
-    tmpUser.save();
-  })
-  .then(() => {
-    return User.populate(tmpUser, "courses");
-  })
-  .then(ins => console.log(ins))
-  .then(() => {
-    return User.find({
-      courses: mongoose.Types.ObjectId(tmpCourse._id)
-    });
-  })
-  .then(ins => console.log(ins))
-  .catch(error => console.log(error));
+    tmpUser.forEach(ins => {
+        return console.log(ins.email);
+      })
+    })
+    .then(() => {
+      tmpCourse.forEach(ins => {
+          return console.log(ins.title);
+        })
+      })
+  .catch(error => console.log(error))
+
+// //////////////////////////////////////////////////////////////////////////
+// // アソシエーしょ　応用バージョン
+// User.deleteMany({})
+//   .then(ins => console.log(`\n>> ${ins.n}のドキュメントを破棄しました。`))
+//   .then(() => {
+//     return Course.deleteMany({});
+//   })
+//   .then(ins => console.log(`>> ${ins.n}のドキュメントを破棄しました。`))
+//   .then(() => {
+//     return User.create({ name: "nob", email: "nob@email.com", c_code: 331 });
+//   })
+//   .then(User => {
+//     console.log(
+//       `>> Userモデルのドキュメント\n>> ${User.getInfo()}\n>> を生成しました。`
+//     );
+//   })
+//   .then(() => {
+//     return User.findOne({ name: "nob" });
+//   })
+//   .then(ins => {
+//     tmpUser = ins;
+//     console.log(`>> 検索したユーザーは\n>> ${ins.getInfo()}`);
+//   })
+//   .then(() => {
+//     return Course.create({
+//       title: "中世史",
+//       description: "日本の中世史を6ヶ月間で学ぶコースです。",
+//       c_code: 331,
+//       hint: ["平清盛", "足利義満"]
+//     });
+//   })
+//   .then(ins => {
+//     tmpCourse = ins;
+//     console.log(`>> ${ins.title}コースを生成しました。`);
+//   })
+//   .then(() => {
+//     tmpUser.courses.push(tmpCourse);
+//     tmpUser.save();
+//   })
+//   .then(() => {
+//     return User.populate(tmpUser, "courses");
+//   })
+//   .then(ins => console.log(ins))
+//   .then(() => {
+//     return User.find({
+//       courses: mongoose.Types.ObjectId(tmpCourse._id)
+//     });
+//   })
+//   .then(ins => console.log(ins))
+//   .catch(error => console.log(error));
 
 
 // ////////////////////////////////////////////////
