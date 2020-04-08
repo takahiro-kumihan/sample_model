@@ -1,3 +1,87 @@
+// // Member, Course model
+// ////////////////////////////////////////////////////////////////
+const Member = require("./models/member");
+const Course = require("./models/course");
+const mongoose = require("mongoose");
+
+mongoose.connect(
+  "mongodb://localhost:27017/sample_model",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true
+  }
+);
+
+// Member.deleteMany({})
+//   .then(member => console.log(`delete ${ member.n }`))
+//   .then(() => {
+//     return Course.deleteMany({})
+//   })
+//   .then(course => console.log(`delete ${ course.n }`))
+//   .catch(err => console.log(err));
+
+// const participant = new Member({
+//   name: { last: "高広", first: "信之" },
+//   email: "nob@taka.com",
+//   password: "123"
+// });
+
+// participant.save(function (err) {
+//   if (err) return handleError(err);
+//   const course1 = new Course({
+//     title: "西洋史",
+//     participant: participant._id
+//   });
+//   course1.save(function (err) {
+//     if (err) return handleError(err);
+//     return console.log("Created")
+//     // return console.log(`${participant.name.first } : ${ course1.title }`);
+//   });
+//   const course2 = new Course({
+//     title: "日本史",
+//     participant: participant._id
+//   });
+//   course2.save(function (err) {
+//     if (err) return handleError(err);
+//     return console.log("Created")
+//     // return console.log(`${participant.name.first } : ${ course1.title }`);
+//   });
+//   const course3 = new Course({
+//     title: "音楽",
+//     participant: participant._id
+//   });
+//   course3.save(function (err) {
+//     if (err) return handleError(err);
+//     return console.log("Created")
+//     // return console.log(`${participant.name.first } : ${ course1.title }`);
+//   });
+// });
+
+Course
+  .findOne({ title: "西洋史" })
+  .populate("participant")
+  .exec(function (err, course) {
+    if (err) return handleError(err);
+    console.log(course);
+  });
+Course
+  .findOne({ title: "日本史" })
+  .populate("participant")
+  .exec(function (err, course) {
+    if (err) return handleError(err);
+    console.log(course);
+  });
+Course
+  .findOne({ title: "音楽" })
+  .populate("participant")
+  .exec(function (err, course) {
+    if (err) return handleError(err);
+    console.log(course);
+  });
+
+
+
 // // Person 1 : Story 多 の関係
 // ////////////////////////////////////////////////////////////////
 // // 定義
@@ -46,7 +130,7 @@
 //     return Story.deleteMany({})
 //   })
 //   .then(story => console.log(`delete document ${ story.n }`))
-//   .catch(error => console.log(error));
+//   .catch(err => console.log(err));
 
 // // Document生成
 // const author = new Person({
