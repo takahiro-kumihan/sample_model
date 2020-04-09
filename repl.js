@@ -1,9 +1,9 @@
-// // Member, Course model
 // ////////////////////////////////////////////////////////////////
 const mongoose = require("mongoose");
-const Member = require("./models/member");
-const Course = require("./models/course");
-
+// const Member = require("./models/member");
+// const Course = require("./models/course");
+const Employee = require("./models/one2many").Employee;
+const Unit = require("./models/one2many").Unit;
 mongoose.connect(
   "mongodb://localhost:27017/sample_model",
   {
@@ -13,8 +13,59 @@ mongoose.connect(
   }
 );
 
+mongoose.Promise = global.Promise;
 
-
+////////////////////////////////////////////////////////////////
+Employee.deleteMany({})
+  .then((docs) => console.log(`Delete ${ docs.n } documents.`))
+  .then(() => {
+    return Unit.deleteMany({});
+  })
+  .then((docs) => console.log(`Delete ${ docs.n } documents.`))
+  .then(() => {
+    return Employee.create({
+      name: "高広"
+    });
+  })
+  .then((employee) => {
+    Unit.create({
+      name: "京都",
+      employees: employee._id,
+    });
+    console.log(`${ employee.name }さんを追加しました。`);
+  })
+  .then(() => {
+    return Employee.create({
+      name: "木田"
+    });
+  })
+  .then((employee) => {
+    Unit
+      .findOne({ name: "京都" })
+      .then((unit) => {
+        unit.employees.push(employee._id);
+        unit.save();
+      });
+    console.log(`${employee.name}さんを追加しました。`);
+  })
+  .then(() => {
+    return Employee.create({
+      name: "竹中"
+    });
+  })
+  .then((employee) => {
+    Unit
+      .findOne({ name: "京都" })
+      .then((unit) => {
+        unit.employees.push(employee._id);
+        unit.save();
+      });
+    console.log(`${employee.name}さんを追加しました。`);
+  })
+  .catch((err) => {
+    console.log(err);
+  })
+////////////////////////////////////////////////////////////////
 
 // // 一旦、DBのCollectionを削除する。
 // Member.deleteMany({})
