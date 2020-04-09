@@ -10,8 +10,8 @@ const memberSchema = new Schema({
              lowercase: true,
              unique: true },
   password: { type: String, required: true },
-  course: [{ type: Schema.Types.ObjectId,
-              ref: "Course" }]
+  classes: [{ type: Schema.Types.ObjectId, ref: "Course" }], // 『先生』が受け持っている『講座』は複数
+  attend:  [{ type: Schema.Types.ObjectId, ref: "Course" }]  // 『生徒』が出席している『講座』は複数
 });
 
 // Methods

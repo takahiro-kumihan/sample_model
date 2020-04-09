@@ -1,9 +1,9 @@
-// // Member, Course model
 // ////////////////////////////////////////////////////////////////
-const Member = require("./models/member");
-const Course = require("./models/course");
 const mongoose = require("mongoose");
-
+// const Member = require("./models/member");
+// const Course = require("./models/course");
+const Employee = require("./models/one2many").Employee;
+const Unit = require("./models/one2many").Unit;
 mongoose.connect(
   "mongodb://localhost:27017/sample_model",
   {
@@ -13,74 +13,150 @@ mongoose.connect(
   }
 );
 
+mongoose.Promise = global.Promise;
+
+////////////////////////////////////////////////////////////////
+Employee.deleteMany({})
+  .then((docs) => console.log(`Delete ${ docs.n } documents.`))
+  .then(() => {
+    return Unit.deleteMany({});
+  })
+  .then((docs) => console.log(`Delete ${ docs.n } documents.`))
+  .then(() => {
+    return Employee.create({
+      name: "高広"
+    });
+  })
+  .then((employee) => {
+    Unit.create({
+      name: "京都",
+      employees: employee._id,
+    });
+    console.log(`${ employee.name }さんを追加しました。`);
+  })
+  .then(() => {
+    return Employee.create({
+      name: "木田"
+    });
+  })
+  .then((employee) => {
+    Unit
+      .findOne({ name: "京都" })
+      .then((unit) => {
+        unit.employees.push(employee._id);
+        unit.save();
+      });
+    console.log(`${employee.name}さんを追加しました。`);
+  })
+  .then(() => {
+    return Employee.create({
+      name: "竹中"
+    });
+  })
+  .then((employee) => {
+    Unit
+      .findOne({ name: "京都" })
+      .then((unit) => {
+        unit.employees.push(employee._id);
+        unit.save();
+      });
+    console.log(`${employee.name}さんを追加しました。`);
+  })
+  .catch((err) => {
+    console.log(err);
+  })
+////////////////////////////////////////////////////////////////
+
+// // 一旦、DBのCollectionを削除する。
 // Member.deleteMany({})
-//   .then(member => console.log(`delete ${ member.n }`))
+//   .then(member => console.log(`Delete ${ member.n } document.`))
 //   .then(() => {
-//     return Course.deleteMany({})
+//     return Course.deleteMany({});
 //   })
-//   .then(course => console.log(`delete ${ course.n }`))
+//   .then(course => console.log(`Delete ${ course.n } document.`))
 //   .catch(err => console.log(err));
 
-// const participant = new Member({
+// // 新規メンバーをteacherというインスタンス名で作成する。
+// const teacher = new Member({
+//   _id: new mongoose.Types.ObjectId(),
 //   name: { last: "高広", first: "信之" },
 //   email: "nob@taka.com",
 //   password: "123"
 // });
 
-// participant.save(function (err) {
-//   if (err) return handleError(err);
-//   const course1 = new Course({
-//     title: "西洋史",
-//     participant: participant._id
-//   });
-//   course1.save(function (err) {
-//     if (err) return handleError(err);
-//     return console.log("Created")
-//     // return console.log(`${participant.name.first } : ${ course1.title }`);
-//   });
-//   const course2 = new Course({
+// // teacherインスタンスにteacher PARAMSと関連付けて、コースを新規で生成する。
+// // #1
+// teacher.save(function (err) {
+//   if (err) return(err);
+//   const course = new Course({
 //     title: "日本史",
-//     participant: participant._id
+//     teacher: teacher._id,
+//     participants: [],
+//     description: "中世の日本史を学びます。"
 //   });
-//   course2.save(function (err) {
-//     if (err) return handleError(err);
-//     return console.log("Created")
-//     // return console.log(`${participant.name.first } : ${ course1.title }`);
-//   });
-//   const course3 = new Course({
-//     title: "音楽",
-//     participant: participant._id
-//   });
-//   course3.save(function (err) {
-//     if (err) return handleError(err);
-//     return console.log("Created")
-//     // return console.log(`${participant.name.first } : ${ course1.title }`);
+//   course.save(function (err) {
+//     if (err) return(err);
 //   });
 // });
 
-Course
-  .findOne({ title: "西洋史" })
-  .populate("participant")
-  .exec(function (err, course) {
-    if (err) return handleError(err);
-    console.log(course);
-  });
-Course
-  .findOne({ title: "日本史" })
-  .populate("participant")
-  .exec(function (err, course) {
-    if (err) return handleError(err);
-    console.log(course);
-  });
-Course
-  .findOne({ title: "音楽" })
-  .populate("participant")
-  .exec(function (err, course) {
-    if (err) return handleError(err);
-    console.log(course);
-  });
+// // #2
+// const teacher = new Member({
+//   _id: new mongoose.Types.ObjectId(),
+//   name: { last: "高広", first: "茉李"},
+//   email: "mari@taka.com",
+//   password: "456"
+// });
+
+// teacher.save(function(err){
+//   if (err) return(err);
+//   console.log(teacher);
+//   const course = new Course({
+//     title: "西洋史",
+//     teacher: teacher._id,
+//     participants: [],
+//     description: "ギリシャ・ローマの世界観"
+//   });
+//   course.save(function(err) {
+//     if (err) return(err);
+//     console.log(course);
+//   });
+// });
+
+// // #3
+// const teacher = new Member({
+//   _id: new mongoose.Types.ObjectId(),
+//   name: { last: "高広", first: "和恵"},
+//   email: "kazu@taka.com",
+//   password: "789"
+// });
+
+// teacher.save(function(err){
+//   if (err) return(err);
+//   console.log(teacher);
+//   const course = new Course({
+//     title: "楽典",
+//     teacher: teacher._id,
+//     participants: [],
+//     description: "バッハの音楽系譜と文化"
+//   });
+//   course.save(function(err) {
+//     if (err) return(err);
+//     console.log(course);
+//   });
+// });
 
 
+// // POPULATE
+// Course
+//   // .findOne({ title: "日本史" })
+//   .findOne({ title: "西洋史" })
+//   // .findOne({ title: "楽典" })
+//   .populate("teacher")
+//   .exec(function(err, course) {
+//     if (err) return(err);
+//     console.log(course);
+//     // console.log(course.teacher.name.last);
+//   });
 
 // // Person 1 : Story 多 の関係
 // ////////////////////////////////////////////////////////////////
