@@ -1,19 +1,20 @@
-// expressをロードする
+// expressをロードする。
 const express = require("express"),
-      // expressをインスタンスとして保持する
+      // expressをインスタンスとして保持する。
       app = express();
 
-// portの確保 環境変数で指定がなければ3000番をつかう
+// portの確保（オプション--環境変数で指定がなければ3000番を使う。）
 app.set("port", process.env.PORT || 3000);
 
-// 本文の解析で、URLエンコーディングとJSONパラメータの処理を行う
+// 本文の解析で、
+// URLエンコーディングとJSONパラメータの処理を行う。
+// ///////////////////////////////////////////////全然理解してない箇所
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // for DB
 const mongoose = require("mongoose");
-// promiseを使う
-mongoose.Promise = global.Promise;
+
 // DBに接続
 mongoose.connect(
   // DB名：form
@@ -30,6 +31,10 @@ mongoose.connect(
   db.once("open", () => {
     console.log("DBへの接続は成功しました。")
   });
+
+// Promise
+// mongooseのPromiseではなく、グローバルのpromiseを使う。
+mongoose.Promise = global.Promise;
 
 // 静的ファイルの関連付け
 //   イメージ、CSS ファイル、JavaScript ファイルなどの
@@ -71,7 +76,7 @@ app.get("/courses",
 );
 //   for contact-FORM フォームへの記入ページ
 //     1行目は、express-ejs-layoutsで場所を特定している
-app.get("/contact", subscribersCtl.showContact);
+app.get("/contact", subscribersCtl.getSubscriberPage);
 //   for contact-POST 投稿とその後の振る舞い
 app.post("/thanks", subscribersCtl.saveSubscriber);
 //   for contact-LIST フォームで集めた全データをリストで見せる

@@ -16,8 +16,8 @@ const subscriberSchema = mongoose.Schema({
   },
   zip_code: {
     type: Number,
-    nim: [1000, "郵便番号が短いです。"],
-    max:  9999
+    min: [1000, "郵便番号が短いです。"],
+    max: 9999
   },
   // リレーション
   courses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }]

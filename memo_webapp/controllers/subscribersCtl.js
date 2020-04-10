@@ -6,7 +6,7 @@ const Subscriber = require("../models/subscriber");
 
 // メソッド定義
 // FORM 入力FORMを表示する
-exports.showContact = (req, res) => {
+exports.getSubscriberPage = (req, res) => {
   // なぜ『/』パスは不要なのか？
   //   メソッドの受け側が、『app.get』したインスタンスなので
   //   resはディレクトリが判っているという理由で『/』パスは不要なのかも？
@@ -22,9 +22,9 @@ exports.saveSubscriber = (req, res) => {
     email: req.body.email,
     zip_code: req.body.zip_code });
   newSubscriber.save()
-    .then( (ins) => {
+    .then(ins => {
       res.render("thanks", {
-        Subscriber: ins
+        new_subscriber: ins
       });
     })
     .catch( (error) => {
@@ -39,10 +39,9 @@ exports.getAllSubscribers = (req, res) => {
     // DBにアクセスしてfindを実行し結果を返してるわけか？
     .exec()
     // 確保したデータをthenブロックで処理する
-    .then( (ins) => {
+    .then(subscribers => {
       res.render("subscribers", {
-        // 違和感があるけど、とりあえず繋がる書き方
-        Subscribers: ins
+        Subscribers: subscribers
       });
     })
     // プロミスを破ったエラーを掴む　という表現がよくわからない？
