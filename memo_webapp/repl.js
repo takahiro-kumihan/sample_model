@@ -2,8 +2,12 @@
 
 const mongoose = require("mongoose"),
       Course = require("./models/course"),
-      Subscriber = require("./models/subscriber");
-var tmpCourse, tmpSubscriber;
+      Subscriber = require("./models/subscriber"),
+      User = require("./models/user");
+
+// インスタンスの中、代入されて以降の範囲で使えるローカル変数を
+// インスタンスの外側で定義する。
+var tmpCourse, tmpSubscriber, tmpUser;
 
 mongoose.connect(
   "mongodb://localhost:27017/recipi_db",
@@ -18,118 +22,63 @@ mongoose.connect(
 mongoose.Promise = global.Promise;
 
 /////////////////////////////////////////////
-// リレーション
-Course.create({
-  title: "トマトの国",
-  description: "トマトソースで和えたパスタ。",
-  zip_code: 626,
-  items: ["トマト", "パスタ"]
-})
-  .then(query => tmpCourse = query);
+// create User model
+User.deleteMany({})
+  .exec()
+  .then(docs => console.log(`\n>>>> User document Delete: ${docs.n}`))
+  .then(() => {
+    return Subscriber.deleteMany({});
+  })
+  .then(docs => console.log(`>>>> Subscriber document Delete ${docs.n}`))
+  .then(() => {
+    return User.create({
+      name: {
+        last: "John",
+        first: "Lennon",
+      },
+      email: "john@lennon.com",
+      password: "pw123",
+    });
+  })
+  // .then(user => { tmpUser = user; })
+  .then(user => tmpUser = user)
+  .then(() => {
+    return Subscriber.create({
+      name: "Jonny",
+      email: "john@lennon.com",
+      zip_code: 1009
+    })
+  })
+  .then(() => {
+    // return Subscriber[0];
+    return Subscriber.findOne({ email: tmpUser.email });
+  })
+  .then(subscriber => {
+    tmpUser.subscribed_account = subscriber;
+    tmpUser.save().then(() => console.log(`${ tmpUser }\n>>>> Data updated!`));
+  })
+  ///////////////////////////////// // なぜローカル変数が展開されないのか？
+  ///////////////////////////////// // なぜ、非同期処理のワナにひっかかっているのか？
+  // .then(tmpCourse => {
+  //   tmpCourse = "Greeting Hello, tmplate Course model!";
+  // })
+  // .then(() => { console.log(`hellohello ${ tmpCourse }`); })
+  .catch((error) => console.log(error.message));
 
-Subscriber.findOne({})
-  .then(query => tmpSubscriber = query);
-
-tmpSubscriber.courses.push(tmpCourse);
-tmpSubscriber.save();
-Subscriber.populate(tmpSubscriber, "courses")
-  .then(query => console.log(query));
-
-// const mongoose = require("mongoose"),
-//   User = require("./models/user");
-
-// mongoose.connect(
-//   "mongodb://localhost:27017/recipi_db",
-//   {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//     useNewUrlParser: true,
-//     useCreateIndex: true
-//   }
-// );
-
-// mongoose.Promise = global.Promise;
-
-// // tmp create
-// var tmpUser;
-// User.create({
-//   name: {
-//     last: "高広",
-//     first: "信之"
-//   },
-//   email: "nob@taka.com",
-//   password: "pass123",
-// })
-// .then(ins => tmpUser = ins)
-// .catch(error => console.log(error.message));
-
-////////////////////////////////////////////////////////////
-// // today 200329
-// const mongoose = require("mongoose"),
-//   user = require("./models/person");
-//   user = require("./models/story");
-
-// mongoose.connect(
-//   "mongodb://localhost:27017/card",
-//   { useNewUrlParser: true, useUnifiedTopology: true }
-// );
-
-// mongoose.Promise = global.Promise;
-
-// user.create({
-//     name: "paul mac",
-//     age: 40
-//   })
-//   .then(user => console.log(user))
-//   .catch(error => console.log(error.message));
-
-/////////////////////////////////////////////////////////
-// // today 200328
-// const mongoose = require("mongoose"),
-//   user = require("./models/user");
-
-// mongoose.connect(
-//   "mongodb://localhost:27017/study",
-//   { useNewUrlParser: true, useUnifiedTopology: true }
-// );
-
-// mongoose.Promise = global.Promise;
-
-// user.create({
-//     name: "paul mac",
-//     age: 40
-//   })
-//   .then(user => console.log(user))
-//   .catch(error => console.log(error.message));
-
-//////////////////////////////////////////////////////////////
-// const mongoose = require("mongoose"),
-//   Subscribers = require("./models/subscribers");
-
-// mongoose.connect(
-//   "mongodb://localhost:27017/recipi_db",
-//   {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//     useNewUrlParser: true,
-//     useCreateIndex: true
-//   }
-// );
-
-// mongoose.Promise = global.Promise;
-
-// Subscribers.create({
-//     name: "john lennon",
-//     email: "john@lennon.com",
-//     zip_code: 5731114
-//   })
-//   .then(Subscribers => console.log(Subscribers))
-//   .catch(error => console.log(error.message));
-
-// var subscriber;
-// Subscribers.findOne({
-//   name: "john lennon"
-// }).then(result => {
-//   subscriber = result;
-//   console.log(subscriber.getInfo());
-// });
+// /////////////////////////////////////////////
+// // リレーション
+// Course.create({
+  //   title: "トマトの国",
+  //   description: "トマトソースで和えたパスタ。",
+  //   zip_code: 626,
+  //   items: ["トマト", "パスタ"]
+  // })
+  //   .then(query => tmpCourse = query);
+  
+  // Subscriber.findOne({})
+  //   .then(query => tmpSubscriber = query);
+  
+  // tmpSubscriber.courses.push(tmpCourse);
+  // tmpSubscriber.save();
+  // Subscriber.populate(tmpSubscriber, "courses")
+  //   .then(query => console.log(query));

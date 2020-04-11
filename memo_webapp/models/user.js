@@ -1,6 +1,11 @@
 "use strict";
 
 // for Schema
+// const mongoose = require("mongoose"),
+//       Schema = mongoose.Schema;
+// ... ... ...
+// という書き方をしているが、
+// 以下のように連想配列の値に代入するような方法のあるのだと確認する。
 const mongoose = require("mongoose"),
   { Schema } = mongoose,
   userSchema = new Schema({
@@ -32,7 +37,7 @@ const mongoose = require("mongoose"),
     courses: [{
       type: Schema.Types.ObjectId, ref: "Course"
     }],
-    subscribe_account: {
+    subscribed_account: {
       type: Schema.Types.ObjectId, ref: "Subscriber"
     }
   }, { timestamps: true });
