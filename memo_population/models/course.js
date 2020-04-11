@@ -7,8 +7,10 @@ const courseSchema = new Schema({
     reqired: true,
     unique: true,
   },
-  teacher: { type: Schema.Types.ObjectId, ref: "Member" },        // 『講座』の『先生』は一人
-  participants: [{ type: Schema.Types.ObjectId, ref: "Member" }], // 『講座』の『受講生（生徒）』は複数
+  teacher: { type: Schema.Types.ObjectId, ref: "Member" },
+  // 『講座』の『先生』は一人
+  participants: [{ type: Schema.Types.ObjectId, ref: "Member" }], 
+  // 『講座』の『受講生（生徒）』は複数
   description: {
     type: String,
     required: true,

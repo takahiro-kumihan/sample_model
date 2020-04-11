@@ -1,9 +1,13 @@
+"use strict";
+
 // ////////////////////////////////////////////////////////////////
 const mongoose = require("mongoose");
 // const Member = require("./models/member");
 // const Course = require("./models/course");
-const Employee = require("./models/one2many").Employee;
-const Unit = require("./models/one2many").Unit;
+const Person = require("./models/population").Person;
+const Unit = require("./models/population").Unit;
+const Composition = require("./models/population").Composition;
+
 mongoose.connect(
   "mongodb://localhost:27017/sample_model",
   {
@@ -16,51 +20,79 @@ mongoose.connect(
 mongoose.Promise = global.Promise;
 
 ////////////////////////////////////////////////////////////////
-Employee.deleteMany({})
-  .then((docs) => console.log(`Delete ${ docs.n } documents.`))
+Person.deleteMany({})
+  .then((docs) => console.log(`\n>>>>> pepole collection delete ${ docs.n } documents.`))
   .then(() => {
     return Unit.deleteMany({});
   })
-  .then((docs) => console.log(`Delete ${ docs.n } documents.`))
+  .then((docs) => console.log(`>>>>> unit collection delete ${ docs.n } documents.`))
   .then(() => {
-    return Employee.create({
-      name: "高広"
+    return Composition.deleteMany({});
+  })
+  .then((docs) => console.log(`>>>>> composition collection delete ${ docs.n } documents.`))
+  .then(() => {
+    return Person.create({
+      name: "Johne Lennon"
     });
   })
-  .then((employee) => {
+  .then((musisian) => {
     Unit.create({
-      name: "京都",
-      employees: employee._id,
-    });
-    console.log(`${ employee.name }さんを追加しました。`);
+      name: "The Beatles",
+      member: musisian._id
+    })
+    .then(unit => {
+      console.log(`${ unit.name }に${ musisian.name }を追加しました。`);
+    })
   })
   .then(() => {
-    return Employee.create({
-      name: "木田"
+    return Person.create({
+      name: "Paul McCartney"
     });
   })
-  .then((employee) => {
+  .then((musisian) => {
     Unit
-      .findOne({ name: "京都" })
+      .findOne({ name: "The Beatles" })
       .then((unit) => {
-        unit.employees.push(employee._id);
+        unit.member.push(musisian._id);
         unit.save();
-      });
-    console.log(`${employee.name}さんを追加しました。`);
+        console.log(`${unit.name}に${musisian.name}を追加しました。`);
+        return Composition.create({
+          title: "Please Please Me",
+          performer: unit._id
+        });
+      })
   })
   .then(() => {
-    return Employee.create({
-      name: "竹中"
+    return Person.create({
+      name: "Jimmy Page"
     });
   })
-  .then((employee) => {
+  .then((musisian) => {
+    Unit.create({
+      name: "Led Zeppelin",
+      member: musisian._id
+    })
+    .then(unit => {
+      console.log(`${ unit.name }に${ musisian.name }を追加しました。`);
+    })
+  })
+  .then(() => {
+    return Person.create({
+      name: "Robert Plant"
+    });
+  })
+  .then((musisian) => {
     Unit
-      .findOne({ name: "京都" })
+      .findOne({ name: "Led Zeppelin" })
       .then((unit) => {
-        unit.employees.push(employee._id);
+        unit.member.push(musisian._id);
         unit.save();
+        console.log(`${unit.name}に${musisian.name}を追加しました。`);
+        return Composition.create({
+          title: "Stairway to Heaven",
+          performer: unit._id,
+        });
       });
-    console.log(`${employee.name}さんを追加しました。`);
   })
   .catch((err) => {
     console.log(err);
