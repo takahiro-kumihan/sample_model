@@ -59,6 +59,7 @@ app.use(layouts);
 const pathCtl = require("./controllers/pathCtl");
 const offeredCoursesCtl = require("./controllers/offeredCoursesCtl");
 const subscribersCtl = require("./controllers/subscribersCtl");
+const usersCtl = require("./controllers/usersCtl");
  
 // 経路
 //   リクエストが来た時の反応をここでスイッチングしていく
@@ -85,6 +86,10 @@ app.get("/subscribers",
           res.render("subscribers", { Subscribers: req.data }); 
         }
 );
+
+// for user module
+app.get("/users", usersCtl.index, usersCtl.indexView);
+// app.get("/users", usersCtl.index);
 
 // アプリがPORTを監視するための設定
 app.listen(app.get("port"), () => {

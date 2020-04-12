@@ -1,9 +1,12 @@
 "use strict";
 
-const mongoose = require("mongoose");
+// 勿論このやり方もあるが、このアプリでは以下にで統一。
+// const mongoose = require("mongoose"),
+//         Schema = mongoose.Schema;
 
-// for schema
-const subscriberSchema = mongoose.Schema({
+const mongoose = require("mongoose"),
+{ Schema } = mongoose,
+subscriberSchema = new Schema({
   name: {
     type: String,
     required: true
