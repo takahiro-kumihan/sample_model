@@ -47,13 +47,7 @@ let course_sets = [
     zip_code: 3456
   }
 ],
-commands = [],
-query = {
-  $and: [
-          { "title": "トマトのソースパスタ" },
-          { "title": "揚げそば" },
-        ]
-};
+commands = [];
 
 Course.deleteMany()
   .exec()
@@ -141,10 +135,10 @@ Course.deleteMany()
 //     tmpUser.subscribed_account = subscriber;
 //     tmpUser.save().then(() => console.log(`${ tmpUser }\n>>>> Data updated!`));
 //   })
-  // ///////////////////////////////// // なぜローカル変数が展開されないのか？
-  // ///////////////////////////////// // なぜ、非同期処理のワナにひっかかっているのか？
-  // // .then(tmpCourse => {
-  // //   tmpCourse = "Greeting Hello, tmplate Course model!";
-  // // })
-  // // .then(() => { console.log(`hellohello ${ tmpCourse }`); })
-  // .catch((error) => console.log(error.message));
+// ///////////////////////////////// // なぜローカル変数が展開されないのか？
+// ///////////////////////////////// // なぜ、非同期処理のワナにひっかかっているのか？
+// // .then(tmpCourse => {
+// //   tmpCourse = "Greeting Hello, tmplate Course model!";
+// // })
+// // .then(() => { console.log(`hellohello ${ tmpCourse }`); })
+// .catch((error) => console.log(error.message));

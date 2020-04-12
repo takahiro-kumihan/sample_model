@@ -1,0 +1,17 @@
+<h2>Users Table</h2>
+<table>
+  <thead>
+    <tr>
+      <th>お名前</th>
+      <th>Email</th>
+      <th>Zip Code</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% users.forEach(u => { %>
+    <td><%= u.fullName %></td>
+    <td><%= u.email %></td>
+    <td><%= u.zip_code %></td>
+    <% }); %>
+  </tbody>
+</table>

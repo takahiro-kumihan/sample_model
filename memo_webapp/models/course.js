@@ -23,8 +23,8 @@ courseSchema = new Schema({
   items: [],
   zip_code: {
     type: Number,
-    min: [100, "コース番号の桁が短いです"],
-    max:  999
+    min: [1000, "コース番号の桁が短いです"],
+    max:  9999
   }
 })
 
