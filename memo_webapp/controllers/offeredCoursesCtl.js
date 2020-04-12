@@ -10,9 +10,9 @@ exports.showCourses = (req, res) => {
 exports.getAllCourses = (req, res) => {
   Course.find({})
     .exec()
-    .then( (ins) => {
+    .then(courses => {
       res.render("courses", {
-        Courses: ins
+        Courses: courses
       });
     })
     // プロミスを破ったエラーを掴む　という表現がよくわからない？
@@ -20,8 +20,8 @@ exports.getAllCourses = (req, res) => {
       console.log(error.message);
       return [];
     })
-    // ログを出す。ただし、この処理要るのか？
-    .then( () => {
-      console.log("promiseは完了です。")
-    });
+    // // ログを出す。ただし、この処理要るのか？
+    // .then( () => {
+    //   console.log("promiseは完了です。")
+    // });
 };

@@ -1,46 +1,44 @@
 "use strict";
 
-// for Schema
+// 勿論このやり方もあるが、このアプリでは以下にで統一。
 // const mongoose = require("mongoose"),
-//       Schema = mongoose.Schema;
-// ... ... ...
-// という書き方をしているが、
-// 以下のように連想配列の値に代入するような方法のあるのだと確認する。
+//         Schema = mongoose.Schema;
+
 const mongoose = require("mongoose"),
-  { Schema } = mongoose,
-  userSchema = new Schema({
-    name: {
-      first: {
-        type: String,
-        trim: true
-      },
-      last: {
-        type: String,
-        trim: true
-      }
-    },
-    email: {
+{ Schema } = mongoose,
+userSchema = new Schema({
+  name: {
+    first: {
       type: String,
-      required: true,
-      lowercase: true,
-      unique: true
+      trim: true
     },
-    zip_code: {
-      type: Number,
-      min: [1000, "Zip code too short"],
-      max: 9999
-    },
-    password: {
+    last: {
       type: String,
-      required: true
-    },
-    courses: [{
-      type: Schema.Types.ObjectId, ref: "Course"
-    }],
-    subscribed_account: {
-      type: Schema.Types.ObjectId, ref: "Subscriber"
+      trim: true
     }
-  }, { timestamps: true });
+  },
+  email: {
+    type: String,
+    required: true,
+    lowercase: true,
+    unique: true
+  },
+  zip_code: {
+    type: Number,
+    min: [1000, "Zip code too short"],
+    max: 9999
+  },
+  password: {
+    type: String,
+    required: true
+  },
+  courses: [{
+    type: Schema.Types.ObjectId, ref: "Course"
+  }],
+  subscribed_account: {
+    type: Schema.Types.ObjectId, ref: "Subscriber"
+  }
+}, { timestamps: true });
 
 // ユーザーのフルネームを取得するparams
 userSchema.virtual("fullName").get(function(){
