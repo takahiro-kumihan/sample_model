@@ -1,7 +1,10 @@
+"use strict";
+
 // expressをロードする。
 const express = require("express"),
       // expressをインスタンスとして保持する。
-      app = express();
+      app = express(),
+      router = express.Router();
 
 // portの確保（オプション--環境変数で指定がなければ3000番を使う。）
 app.set("port", process.env.PORT || 3000);
@@ -9,8 +12,8 @@ app.set("port", process.env.PORT || 3000);
 // 本文の解析で、
 // URLエンコーディングとJSONパラメータの処理を行う。
 // ///////////////////////////////////////////////全然理解してない箇所
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+router.use(express.urlencoded({ extended: false }));
+router.use(express.json());
 
 // for DB
 const mongoose = require("mongoose");
@@ -22,9 +25,9 @@ mongoose.connect(
   // エラーの対処
   { useNewUrlParser: true,
     useUnifiedTopology: true,
-    useNewUrlParser: true,
-    useCreateIndex: true }
-  );
+    useNewUrlParser: true });
+  mongoose.set("useCreateIndex", true);
+
   //   mongoDBへ該当のDBを接続
   const db = mongoose.connection;
   //   接続確認のログを出力する
@@ -43,7 +46,7 @@ mongoose.Promise = global.Promise;
 //   静的アセットファイルを格納しているディレクトリーの名前を
 //   express.static ミドルウェア関数に渡して、
 //   ファイルの直接提供を開始する。
-app.use(express.static("assets"));
+router.use(express.static("assets"));
 
 // レイアウト
 //   viewに関連するファイルの経路の起点となるディレクトリを有効にする
@@ -53,10 +56,9 @@ app.set("view engine", "ejs");
 //   express-ejs-layoutsモジュールを使うことを宣言する
 //   viewsディレクトリにファイルを配置する
 //   レイアウトのための設計図であるlayouts.ejsが必須
-app.use(layouts);
+router.use(layouts);
 
 // controllerのメソッドをロードする    
-const pathCtl = require("./controllers/pathCtl");
 const offeredCoursesCtl = require("./controllers/offeredCoursesCtl");
 const subscribersCtl = require("./controllers/subscribersCtl");
 const usersCtl = require("./controllers/usersCtl");
@@ -64,32 +66,37 @@ const usersCtl = require("./controllers/usersCtl");
 // 経路
 //   リクエストが来た時の反応をここでスイッチングしていく
 //   for index.ejs
-app.get("/", (req, res) => {
+app.use("/", router);
+
+router.get("/", (req, res) => {
   // 初期状態の様子をみるため、ブラウザに文字列を送信する
   // res.send("Here is ROOT.");
   res.render("index");
 });
+
 //   for cooking_course
-app.get("/courses",
+router.get("/courses",
   offeredCoursesCtl.getAllCourses, (req, res, next) => {
     res.render("courses", { Offered_courses: req.data });
   }
 );
 //   for contact-FORM フォームへの記入ページ
 //     1行目は、express-ejs-layoutsで場所を特定している
-app.get("/contact", subscribersCtl.getSubscriberPage);
+router.get("/contact", subscribersCtl.getSubscriberPage);
 //   for contact-POST 投稿とその後の振る舞い
-app.post("/thanks", subscribersCtl.saveSubscriber);
+router.post("/thanks", subscribersCtl.saveSubscriber);
 //   for contact-LIST フォームで集めた全データをリストで見せる
-app.get("/subscribers", 
+router.get("/subscribers", 
   subscribersCtl.getAllSubscribers, (req, res, next) => {
           res.render("subscribers", { Subscribers: req.data }); 
         }
 );
 
 // for user module
-app.get("/users", usersCtl.index, usersCtl.indexView);
-// app.get("/users", usersCtl.index);
+// router.get("/users", usersCtl.index);
+router.get("/users", usersCtl.index, usersCtl.indexView);
+router.get("/users/new", usersCtl.new);
+router.post("/users/create", usersCtl.create, usersCtl.redirectView);
 
 // アプリがPORTを監視するための設定
 app.listen(app.get("port"), () => {

@@ -1,0 +1,17 @@
+<div class="data-form">
+<form class="form-sigin" action="/users/create" method="post">
+  <h2 class="form-signin-heading">Create New User:</h2>
+  <label for="inputLastName">氏</label>
+  <input type="text" name="last" id="inputLastName" class="form-control" placeholder="氏" autofocus>
+  <label for="inputFirstName">名</label>
+  <input type="text" name="first" id="inputFirstName" class="form-control" placeholder="名"" autofocus>
+  <label for="inputPassWord">パスワード</label>
+  <input type="password" name="password" id="inputPassword" class="form-control" placeholder="パスワード" required>
+  <label for="inputEmail">Eメールアドレス</label>
+  <input type="email" name="email" id="inputEmail" class="form-control" placeholder="sample@your_domain.com" required>
+  <label for="inputZip_code">コース番号</label>
+  <input type="text" name="zip_code" pattern="\d*" class="form-control" placeholder="コース番号" id="inputZipCode" required>
+  <br />
+  <button class="btn btn-lg btn-primary btn-block" type="submit">サインイン</button>
+</form>
+</div>
