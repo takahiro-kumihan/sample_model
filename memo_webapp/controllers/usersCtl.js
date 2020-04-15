@@ -3,6 +3,20 @@
 const User = require("../models/user");
 
 module.exports = {
+  index: (req, res, next) => {
+    User.find({})
+      .then((users) => {
+        res.locals.users = users;
+        next();
+      })
+      .catch((err) => {
+        console.log(`Error fetching users: ${err.message}`);
+        next(err);
+      });
+  },
+  indexView: (req, res) => {
+    res.render("users/index");
+  },
   new: (req, res) => {
     res.render("users/new");
   },
@@ -31,20 +45,6 @@ module.exports = {
     let redirectPath = res.locals.redirect;
     if (redirectPath) res.redirect(redirectPath);
     else next();
-  },
-  index: (req, res, next) => {
-    User.find({})
-      .then((users) => {
-        res.locals.users = users;
-        next();
-      })
-      .catch((err) => {
-        console.log(`Error fetching users: ${err.message}`);
-        next(err);
-      });
-  },
-  indexView: (req, res) => {
-    res.render("users/index");
   }
 };
 

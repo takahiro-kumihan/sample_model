@@ -97,3 +97,9 @@ a {
 .hidden-text {
   -webkit-text-security: disc;
 }
+
+/* my coustom */
+.center-center {
+  margin: 10px auto;
+  width: 600px;
+};

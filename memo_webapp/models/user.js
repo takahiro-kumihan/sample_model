@@ -1,5 +1,6 @@
 "use strict";
 
+const Subscriber = require("./subscriber")
 // 勿論このやり方もあるが、このアプリでは以下にで統一。
 // const mongoose = require("mongoose"),
 //         Schema = mongoose.Schema;
@@ -42,7 +43,27 @@ userSchema = new Schema({
 
 // ユーザーのフルネームを取得するparams
 userSchema.virtual("fullName").get(function(){
-  return `${ this.name.first } ${ this.name.last }`;
+  return `${this.name.last } ${ this.name.first }`;
+});
+
+// クエリを保存する前にsubscribed_accountに接木する。
+userSchema.pre("save", function(next) {
+  let user = this;
+  if (user.subscribed_account === undefined) {
+    Subscriber.findOne({
+      email: user.email
+    })
+    .then(subscriber => {
+      user.subscribed_account = subscriber;
+      next();
+    })
+    .catch(err => {
+      console.log(`Error in connecting subscriber: ${ err.massage }`);
+      next();
+    });
+  } else {
+    next();
+  }
 });
 
 // module
