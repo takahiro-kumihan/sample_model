@@ -1,17 +1,20 @@
-<h2>Users Table</h2>
-<table>
+<div class="center-center">
+<table class="table">
   <thead>
     <tr>
-      <th>お名前</th>
-      <th>Email</th>
-      <th>Zip Code</th>
+      <th scope="col">お名前</th>
+      <th scope="col">Email</th>
+      <th scope="col">Zip Code</th>
     </tr>
   </thead>
   <tbody>
     <% users.forEach(u => { %>
-    <td><%= u.fullName %></td>
-    <td><%= u.email %></td>
-    <td><%= u.zip_code %></td>
+    <tr>
+      <td><%= u.fullName %></td>
+      <td><%= u.email %></td>
+      <td><%= u.zip_code %></td>
+    </tr>
     <% }); %>
   </tbody>
 </table>
+</div>
