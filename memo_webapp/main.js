@@ -97,6 +97,7 @@ router.get("/subscribers",
 router.get("/users", usersCtl.index, usersCtl.indexView);
 router.get("/users/new", usersCtl.new);
 router.post("/users/create", usersCtl.create, usersCtl.redirectView);
+router.get("/users/:id", usersCtl.show, usersCtl.showView);
 
 // アプリがPORTを監視するための設定
 app.listen(app.get("port"), () => {

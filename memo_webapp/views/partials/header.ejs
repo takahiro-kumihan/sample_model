@@ -1,16 +1,30 @@
-<div id="nav">
-  <div class="col-sm nav-align">
-    <h1 id="title">Recipe App</h1>
+<nav id="cst_navbar" class="navbar navbar-expand-md ">
+  <!-- navbar-dark bg-dark -->
+  <a class="navbar-brand" href="/" style="color: aliceblue; font-weight: bold;">Kaz Recipe</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04"
+    aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarsExample04">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="/" style="color: aliceblue;">Home<span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item cst_color">
+        <a class="nav-link" href="/courses" style="color: aliceblue;">Breads</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="false" style="color: aliceblue;">Contact</a>
+        <div class="dropdown-menu" aria-labelledby="dropdown04">
+          <a class="dropdown-item" href="/users/new">新規メンバー申し込み</a>
+          <a class="dropdown-item" href="/contact">購読</a>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-md-0">
+      <input class="form-control" type="text" placeholder="Search">
+    </form>
   </div>
-  <div class="col-sm nav-align">
-    <a href="/">
-      <span class="button">Home</span>
-    </a>
-    <a href="/courses">
-      <span class="button">Cooking Courses</span>
-    </a>
-    <a href="/contact">
-      <span class="button">Contact</span>
-    </a>
-  </div>
-</div>
+</nav>

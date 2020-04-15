@@ -1,0 +1,72 @@
+/* ///////////////////////////////////////////////////////////////////// */
+/* Nav Bar */
+#cst_navbar {
+  background-color: rgb(223,157,73);
+}
+
+/* 現状、liタグに直接スタイル書いている */
+/* navbarのliだけ文字色を変更したいができていない */
+/* li {
+  color: aliceblue;
+} */
+
+/* toggle bar */
+.navbar-toggler {
+  border: medium solid rgb(223,186,73);
+}
+
+/* toggle bar 三本線の変更 */
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgb(223,206,73)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+}
+
+/* ドロップダウンメニューの書体 */
+.dropdown-item {
+  font-size: 0.8rem;
+}
+
+/* ///////////////////////////////////////////////////////////////////// */
+/* Index Page */
+.jumbotron-index-extend {
+  position: relative;
+  height: 100vh;
+  min-height: 300px;
+  background: url(../images/bread-2864703_1920.jpg) repeat center center;
+  background-size: cover;
+  border-radius: 0;
+}
+.jumbotron-courses-extend {
+  position: relative;
+  height: 100vh;
+  min-height: 300px;
+  background: url(../images/bread-barley-field-1684052_1920.jpg) repeat center center;
+  background-size: cover;
+  border-radius: 0;
+}
+
+.jumbotron-container {
+  position: relative;
+  top: 35%;
+  transform: translateY(-40%);
+}
+
+h1.index-head {
+  font-weight: bold;
+  font-size: 2rem;
+  color: rgb(241,241,212);
+  text-shadow: 3px 3px 5px rgb(117,28,21);
+}
+
+p.index-lead {
+  font-weight: bold;
+  color: rgb(241,241,212);
+  text-shadow: 2px 2px 1px rgb(117,28,21), -1px -1px 2px rgb(117,28,21);
+}
+
+a.btn {
+  color: rgb(241,241,212);
+  font-weight: bold;
+  font-size: 0.8rem;
+  background-color: rgb(117,28,21);
+  border: none;
+}

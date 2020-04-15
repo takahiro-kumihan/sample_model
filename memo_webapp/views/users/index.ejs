@@ -1,3 +1,5 @@
+<div class="container-sm">
+
 <div class="center-center">
 <table class="table">
   <thead>
@@ -8,13 +10,20 @@
     </tr>
   </thead>
   <tbody>
-    <% users.forEach(u => { %>
+    <% users.forEach(user => { %>
     <tr>
-      <td><%= u.fullName %></td>
-      <td><%= u.email %></td>
-      <td><%= u.zip_code %></td>
+      <!-- <td><%= user.fullName %></td> -->
+      <td>
+        <a href="<%= `/users/${ user._id }` %>">
+          <%= user.fullName %>
+        </a>
+      </td>
+      <td><%= user.email %></td>
+      <td><%= user.zip_code %></td>
     </tr>
     <% }); %>
   </tbody>
 </table>
+</div>
+
 </div>
