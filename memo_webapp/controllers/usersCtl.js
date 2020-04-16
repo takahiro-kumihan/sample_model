@@ -14,7 +14,7 @@ module.exports = {
       },
       email: req.body.email,
       password: req.body.password,
-      zip_code: req.body.zipz_code,
+      zip_code: req.body.zip_code,
     };
     User.create(userParams)
       .then((user) => {
@@ -46,6 +46,55 @@ module.exports = {
   },
   showView: (req,res) => {
     res.render("users/show");
+  },
+  edit: (req, res, next) => {
+    let user_id = req.params.id;
+    User.findById(user_id)
+      .then(user => {
+        res.render("users/edit", {
+          user: user
+        });
+      })
+      .catch(err => {
+        console.log(`Error feching user by ID: ${ err.message }`);
+        next(err);
+      });
+  },
+  update: (req, res, next) => {
+    let user_id = req.params.id,
+      userParams = {
+        name: {
+          last: req.body.last,
+          first: req.body.first,
+        },
+        email: req.body.email,
+        password: req.body.password,
+        zip_code: req.body.zip_code,
+      };
+    User.findByIdAndUpdate(user_id, {
+      $set: userParams
+    })
+    .then(user => {
+      res.locals.redirect = `/users/${ user_id }`;
+      res.locals.user = user;
+      next();
+    })
+    .catch(err => {
+      console.log(`Error updating user by ID: ${ err.message }`);
+      next(err);
+    });
+  },
+  delete: (req, res, next) => {
+    let user_id = req.params.id;
+    User.findByIdAndRemove(user_id)
+      .then(() => {
+        res.locals.redirect = "/users";
+        next();
+      })
+      .catch(err => {
+        console.log(`Error deleting user by ID: ${ err.message }`);
+        next;
+      });
   },
   index: (req, res, next) => {
     User.find({})

@@ -62,7 +62,13 @@ router.use(layouts);
 const offeredCoursesCtl = require("./controllers/offeredCoursesCtl");
 const subscribersCtl = require("./controllers/subscribersCtl");
 const usersCtl = require("./controllers/usersCtl");
- 
+
+// PUTメソッドをエミュレートするためのモジュールをロードする
+const methodOverride = require("method-override");
+router.use(methodOverride("_method", {
+  methods: ["POST", "GET"]
+}));
+
 // 経路
 //   リクエストが来た時の反応をここでスイッチングしていく
 //   for index.ejs
@@ -98,6 +104,9 @@ router.get("/users", usersCtl.index, usersCtl.indexView);
 router.get("/users/new", usersCtl.new);
 router.post("/users/create", usersCtl.create, usersCtl.redirectView);
 router.get("/users/:id", usersCtl.show, usersCtl.showView);
+router.get("/users/:id/edit", usersCtl.edit);
+router.put("/users/:id/update", usersCtl.update, usersCtl.redirectView);
+router.delete("/users/:id/delete", usersCtl.delete, usersCtl.redirectView);
 
 // アプリがPORTを監視するための設定
 app.listen(app.get("port"), () => {
