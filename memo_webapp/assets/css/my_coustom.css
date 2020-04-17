@@ -49,9 +49,10 @@ font-family: 'Pacifico', cursive; */
   background-size: cover;
   border-radius: 0;
 }
+
 .jumbotron-courses-extend {
   position: relative;
-  height: 100vh;
+  height:100vh;
   min-height: 300px;
   background: url(../images/bread-barley-field-1684052_1920.jpg) repeat center center;
   background-size: cover;
@@ -60,8 +61,8 @@ font-family: 'Pacifico', cursive; */
 
 .jumbotron-container {
   position: relative;
-  top: 35%;
-  transform: translateY(-40%);
+  top: 100%;
+  transform: translateY(-70%);
 }
 
 h1.index-head {
@@ -122,10 +123,6 @@ p.index-lead {
   background-color: rgb(120, 40, 31);
   border-color: rgb(120, 40, 31);
 }
-
-
-
-
 
 /* ///////////////////////////////////////////////////////////////////// */
 /* Sign In */
