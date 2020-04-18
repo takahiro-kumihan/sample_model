@@ -1,0 +1,16 @@
+<div class="container">
+  <div class="row">
+    <div class="col-10 cst-signin">
+      <form class="form-sigin" method="POST" action="/subscribers/create">
+        <h1 class="form-signin-heading">新規購読者フォーム</h1>
+        <input type="text" name="last" id="inputLastName" class="form-control  cst-input" placeholder="氏" autofocus>
+        <input type="text" name="first" id="inputFirstName" class="form-control  cst-input" placeholder="名"" autofocus>
+        <input type="password" name="password" id="inputPassword" class="form-control  cst-input" placeholder="パスワード" required>
+        <input type="email" name="email" id="inputEmail" class="form-control  cst-input" placeholder="Eメールアドレス" required>
+        <input type="text" name="zip_code" pattern="\d*" class="form-control  cst-input" placeholder="コース番号" id="inputZipCode" required>
+        <br />
+        <button class="btn btn-md cst-btn btn-block" type="submit">サインイン</button>
+      </form>
+    </div>
+  </div>
+</div>

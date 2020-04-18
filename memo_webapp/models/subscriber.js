@@ -23,8 +23,11 @@ subscriberSchema = new Schema({
     max: 9999
   },
   // リレーション
-  courses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }]
-});
+  courses: [{ type: Schema.Types.ObjectId, ref: "Course" }]
+  }, {
+      timestamps: true
+     }
+);
 
 // メソッドを設定する
 subscriberSchema.methods.getInfo = function() {

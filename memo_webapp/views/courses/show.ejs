@@ -1,0 +1,33 @@
+<div class="container-sm">
+
+<div class="center-center">
+  <h2>User Data for <%= user.fullName %></h2>
+  <table class="table">
+    <tbody>
+      <tr>
+        <th scope="col">お名前</th>
+        <td><%= user.fullName %></td>
+      </tr>
+      <tr>
+        <th scope="col">Email</th>
+        <td><%= user.email %></td>
+      </tr>
+      <tr>
+        <th scope="col">Zip Code</th>
+        <td><%= user.zip_code %></td>
+      </tr>
+      <tr>
+        <th scope="col">パスワード</th>
+        <td><%= user.password %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<% if (user.subscribed_account) { %>
+  <h4 class="center">
+    This user has a <a href="<%= `/subscribers/${ user.subscribed_account }` %>"></a> subscribed account.
+  </h4>
+<% } %>
+
+</div>

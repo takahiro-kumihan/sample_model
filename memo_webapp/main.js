@@ -86,17 +86,28 @@ router.get("/courses",
     res.render("courses", { Offered_courses: req.data });
   }
 );
-//   for contact-FORM フォームへの記入ページ
-//     1行目は、express-ejs-layoutsで場所を特定している
-router.get("/contact", subscribersCtl.getSubscriberPage);
-//   for contact-POST 投稿とその後の振る舞い
-router.post("/thanks", subscribersCtl.saveSubscriber);
-//   for contact-LIST フォームで集めた全データをリストで見せる
-router.get("/subscribers", 
-  subscribersCtl.getAllSubscribers, (req, res, next) => {
-          res.render("subscribers", { Subscribers: req.data }); 
-        }
-);
+
+// for subscriber module
+router.get("/subscribers", subscribersCtl.index, subscribersCtl.indexView);
+router.get("/subscribers/new", subscribersCtl.new);
+router.post("/subscribers/create", subscribersCtl.create, subscribersCtl.redirectView);
+router.get("/subscribers/:id", subscribersCtl.show, subscribersCtl.showView);
+router.get("/subscribers/:id/edit", subscribersCtl.edit);
+router.put("/subscribers/:id/update", subscribersCtl.update, subscribersCtl.redirectView);
+router.delete("/subscribers/:id/delete", subscribersCtl.delete, subscribersCtl.redirectView);
+
+// //   for contact-FORM フォームへの記入ページ
+// //     1行目は、express-ejs-layoutsで場所を特定している
+// router.get("/contact", subscribersCtl.getSubscriberPage);
+// //   for contact-POST 投稿とその後の振る舞い
+// router.post("/thanks", subscribersCtl.saveSubscriber);
+// //   for contact-LIST フォームで集めた全データをリストで見せる
+// router.get("/subscribers/new", subscribersCtl.new);
+// router.get("/subscribers", 
+//   subscribersCtl.getAllSubscribers, (req, res, next) => {
+//           res.render("subscribers", { Subscribers: req.data }); 
+//         }
+// );
 
 // for user module
 // router.get("/users", usersCtl.index);
