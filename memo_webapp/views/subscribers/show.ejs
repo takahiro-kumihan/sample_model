@@ -1,0 +1,30 @@
+<div class="container-sm">
+
+<div class="center-center">
+  <h2>User Data for <%= subscriber.name %></h2>
+  <table class="table">
+    <tbody>
+      <tr>
+        <th scope="col">お名前</th>
+        <td><%= subscriber.name %></td>
+      </tr>
+      <tr>
+        <th scope="col">Email</th>
+        <td><%= subscriber.email %></td>
+      </tr>
+      <tr>
+        <th scope="col">Zip Code</th>
+        <td><%= subscriber.zip_code %></td>
+      </tr>
+    </tbody>
+  </table>
+  <p><%= subscriber.name %>さんは<%= subscriber.courses.length %>のコースを取っています。</p>
+</div>
+
+<% if (subscriber.subscribed_account) { %>
+  <h4 class="center">
+    This subscriber has a <a href="<%= `/subscribers/${ subscriber.subscribed_account }` %>"></a> subscribed account.
+  </h4>
+<% } %>
+
+</div>

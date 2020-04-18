@@ -1,0 +1,42 @@
+<div class="container-sm">
+
+<div class="center-center">
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">お名前</th>
+      <th scope="col">Email</th>
+      <th scope="col">Zip Code</th>
+      <th scope="col">更新</th>
+      <th scope="col">削除</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% users.forEach(user => { %>
+    <tr>
+      <!-- <td><%= user.fullName %></td> -->
+      <td>
+        <a href="<%= `/users/${ user._id }` %>">
+          <%= user.fullName %>
+        </a>
+      </td>
+      <td><%= user.email %></td>
+      <td><%= user.zip_code %></td>
+      <td>
+        <a href="<%= `/users/${ user._id }/edit` %>">
+          編集
+        </a>
+      </td>
+      <td>
+        <a href="<%= `/users/${ user._id }/delete?_method=DELETE` %>"
+          onclick="return confirm(`このプロフィールを削除してよろしいですか？`)">
+          削除
+        </a>
+      </td>
+    </tr>
+    <% }); %>
+  </tbody>
+</table>
+</div>
+
+</div>

@@ -1,12 +1,15 @@
 "use strict";
 
-const Subscriber = require("./subscriber")
+// 接続に成功したら後で削除する行
+// const Subscriber = require("./subscriber")
+
 // 勿論このやり方もあるが、このアプリでは以下にで統一。
 // const mongoose = require("mongoose"),
 //         Schema = mongoose.Schema;
 
 const mongoose = require("mongoose"),
 { Schema } = mongoose,
+Subscriber = require("./subscriber"),
 userSchema = new Schema({
   name: {
     first: {
@@ -43,7 +46,7 @@ userSchema = new Schema({
 
 // ユーザーのフルネームを取得するparams
 userSchema.virtual("fullName").get(function(){
-  return `${this.name.last } ${ this.name.first }`;
+  return `${ this.name.last } ${ this.name.first }`;
 });
 
 // クエリを保存する前にsubscribed_accountに接木する。
@@ -59,7 +62,7 @@ userSchema.pre("save", function(next) {
     })
     .catch(err => {
       console.log(`Error in connecting subscriber: ${ err.massage }`);
-      next();
+      next(err);
     });
   } else {
     next();
