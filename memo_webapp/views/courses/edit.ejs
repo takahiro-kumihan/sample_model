@@ -1,18 +1,11 @@
 <div class="container">
   <div class="row">
     <div class="col-10 cst-signin">
-      <form class="form-sigin" method="POST" action="<%=`/users/${user._id}/update?_method=PUT`%>">
-        <h1 class="form-signin-heading">プロフィール編集</h1>
-        <!-- <label for="inputLastName">氏</label> -->
-        <input type="text" name="last" id="inputLastName" class="form-control  cst-input" value="<%= user.name.last %>" placeholder="氏" autofocus>
-        <!-- <label for="inputFirstName">名</label> -->
-        <input type="text" name="first" id="inputFirstName" class="form-control  cst-input" value="<%= user.name.first %>" placeholder="名" autofocus>
-        <!-- <label for="inputPassWord">パスワード</label> -->
-        <input type="password" name="password" id="inputPassword" class="form-control  cst-input" value="<%= user.password %>" placeholder="パスワード" required>
-        <!-- <label for="inputEmail">Eメールアドレス</label> -->
-        <input type="email" name="email" id="inputEmail" class="form-control  cst-input" value="<%= user.email %>" placeholder="Eメールアドレス" required>
-        <!-- <label for="inputZip_code">コース番号</label> -->
-        <input type="text" name="zip_code" pattern="\d*" class="form-control  cst-input" value="<%= user.zip_code %>" placeholder="コース番号" id="inputZipCode" required>
+      <form class="form-sigin" method="POST" action="<%=`/courses/${course._id}/update?_method=PUT`%>">
+        <h1 class="form-signin-heading">コースの改訂</h1>
+        <input type="text" name="title" id="inputTitle" class="form-control  cst-input" value="<%= course.title %>" placeholder="コース名" autofocus>
+        <input type="text" name="discription" id="inputDiscription" class="form-control  cst-input" value="<%= course.discription %>" placeholder="説明" required>
+        <input type="text" name="cost" id="inputCost" class="form-control  cst-input" value="<%= course.cost %>" placeholder="価格" required>
         <br />
         <button class="btn btn-md cst-btn btn-block" type="submit">更新</button>
       </form>
