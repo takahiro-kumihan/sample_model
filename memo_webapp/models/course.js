@@ -20,7 +20,6 @@ courseSchema = new Schema({
     type: Number,
     default: 0,
     min: [0, "値段は、マイナスの値を持つことができません。"]
-
   },
   max_students: {
     type: Number,

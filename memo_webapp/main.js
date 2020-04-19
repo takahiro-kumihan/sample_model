@@ -27,6 +27,8 @@ mongoose.connect(
     useUnifiedTopology: true,
     useNewUrlParser: true });
   mongoose.set("useCreateIndex", true);
+  mongoose.set('useFindAndModify', false);
+
 
   //   mongoDBへ該当のDBを接続
   const db = mongoose.connection;
@@ -59,7 +61,7 @@ app.set("view engine", "ejs");
 router.use(layouts);
 
 // controllerのメソッドをロードする    
-const offeredCoursesCtl = require("./controllers/offeredCoursesCtl");
+const coursesCtl = require("./controllers/coursesCtl");
 const subscribersCtl = require("./controllers/subscribersCtl");
 const usersCtl = require("./controllers/usersCtl");
 
@@ -80,12 +82,12 @@ router.get("/", (req, res) => {
   res.render("index");
 });
 
-//   for cooking_course
-router.get("/courses",
-  offeredCoursesCtl.getAllCourses, (req, res, next) => {
-    res.render("courses", { Offered_courses: req.data });
-  }
-);
+// //   for cooking_course
+// router.get("/courses",
+//   offeredCoursesCtl.getAllCourses, (req, res, next) => {
+//     res.render("courses", { Offered_courses: req.data });
+//   }
+// );
 
 // for subscriber module
 router.get("/subscribers", subscribersCtl.index, subscribersCtl.indexView);
@@ -118,6 +120,15 @@ router.get("/users/:id", usersCtl.show, usersCtl.showView);
 router.get("/users/:id/edit", usersCtl.edit);
 router.put("/users/:id/update", usersCtl.update, usersCtl.redirectView);
 router.delete("/users/:id/delete", usersCtl.delete, usersCtl.redirectView);
+
+// for course module
+router.get("/courses", coursesCtl.index, coursesCtl.indexView);
+router.get("/courses/new", coursesCtl.new);
+router.post("/courses/create", coursesCtl.create, coursesCtl.redirectView);
+router.get("/courses/:id", coursesCtl.show, coursesCtl.showView);
+router.get("/courses/:id/edit", coursesCtl.edit);
+router.put("/courses/:id/update", coursesCtl.update, coursesCtl.redirectView);
+router.delete("/courses/:id/delete", coursesCtl.delete, coursesCtl.redirectView);
 
 // アプリがPORTを監視するための設定
 app.listen(app.get("port"), () => {
