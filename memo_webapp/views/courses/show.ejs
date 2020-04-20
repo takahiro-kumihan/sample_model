@@ -5,16 +5,20 @@
   <table class="table">
     <tbody>
       <tr>
-        <th scope="col">コース名</th>
+        <th scope="col">品名</th>
         <td><%= course.title %></td>
       </tr>
       <tr>
-        <th scope="col">Email</th>
+        <th scope="col">キャッチコピー</th>
+        <td><%= course.heading %></td>
+      </tr>
+      <tr>
+        <th scope="col">本文</th>
         <td><%= course.discription %></td>
       </tr>
       <tr>
-        <th scope="col">価格</th>
-        <td><%= course.cost %></td>
+        <th scope="col">手順</th>
+        <td><%= course.process %></td>
       </tr>
     </tbody>
   </table>
