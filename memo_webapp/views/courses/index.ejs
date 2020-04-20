@@ -4,10 +4,11 @@
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">コース名</th>
-      <th scope="col">説明</th>
-      <th scope="col">価格</th>
-      <th scope="col">更新</th>
+      <th scope="col">品名</th>
+      <th scope="col">キャッチコピー</th>
+      <th scope="col">本文</th>
+      <th scope="col">手順</th>
+      <th scope="col">編集</th>
       <th scope="col">削除</th>
     </tr>
   </thead>
@@ -19,8 +20,9 @@
           <%= c.title %>
         </a>
       </td>
+      <td><%= c.heading %></td>
       <td><%= c.discription %></td>
-      <td><%= c.cost %></td>
+      <td><%= c.process %></td>
       <td>
         <a href="<%= `/courses/${ c._id }/edit` %>">
           編集
