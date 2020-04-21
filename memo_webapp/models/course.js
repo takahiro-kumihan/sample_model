@@ -12,23 +12,20 @@ courseSchema = new Schema({
     required: true,
     unique: true
   }, 
-  heading: {
+  discription: {
     type: String,
     required: true
   },
-  discription: {
-    type: String,
-    // required: true
+  cost: {
+    type: Number,
+    default: 0,
+    min: [0, "値段は、マイナスの値を持つことができません。"]
   },
-  process: {
-    type: String,
-    // required: true
+  max_students: {
+    type: Number,
+    default: 0,
+    min: [0, "受講者数は、マイナスの値を持つことができません。"]
   }
-  // max_students: {
-  //   type: Number,
-  //   default: 0,
-  //   min: [0, "受講者数は、マイナスの値を持つことができません。"]
-  // }
 }, { timestamps: true });
 
 module.exports = mongoose.model("Course", courseSchema)
