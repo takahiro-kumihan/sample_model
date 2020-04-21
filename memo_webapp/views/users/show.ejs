@@ -25,9 +25,9 @@
   </div>
 
   <% if (user.subscribed_account) { %>
-    <h4 class="center">
-      This user has a <a href="<%= `/subscribers/${ user.subscribed_account }` %>"></a> subscribed account.
-    </h4>
+    <h6>
+      <%= user.fullName %>さんは、<a href="<%= `/subscribers/${ user.subscribed_account }` %>">購読者アカウント</a>も持っておられます。
+    </h6>
   <% } %>
 
   <div class="btn-group btn-sm" role="group">
