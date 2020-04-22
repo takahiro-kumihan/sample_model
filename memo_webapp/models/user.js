@@ -10,7 +10,7 @@
 const mongoose = require("mongoose"),
 { Schema } = mongoose,
 Subscriber = require("./subscriber"),
-Course = require("./course")
+Course = require("./course"),
 userSchema = new Schema({
   name: {
     first: {

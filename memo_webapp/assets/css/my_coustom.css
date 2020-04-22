@@ -79,6 +79,15 @@ p.index-lead {
   text-shadow: 2px 2px 1px rgb(176, 58, 46), -1px -1px 2px rgb(176, 58, 46);
 }
 
+/* flash message */
+.cst-flash {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+
 /* .btn {
   color: rgb(241,241,212);
   font-weight: bold;

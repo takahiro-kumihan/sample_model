@@ -57,7 +57,7 @@ const layouts = require("express-ejs-layouts");
 app.set("view engine", "ejs");
 //   express-ejs-layoutsモジュールを使うことを宣言する
 //   viewsディレクトリにファイルを配置する
-//   レイアウトのための設計図であるlayouts.ejsが必須
+//   レイアウトのための設計図であるlayout.ejsが必須
 router.use(layouts);
 
 // controllerのメソッドをロードする    
@@ -71,23 +71,44 @@ router.use(methodOverride("_method", {
   methods: ["POST", "GET"]
 }));
 
+// flash message
+// フラッシュメッセージのために必要なモジュールをロードする。
+// 罠　罠　罠　
+// 置き場所が経路より先にしておかないと
+// 『flashaMessage』インスタンスをlayout.ejsへ
+// 持っていけない
+const expressSession = require("express-session"),
+  cookieParser = require("cookie-parser"),
+  connectFlash = require("connect-flash");
+
+// cookie-parserをミドルウェアとして使う
+router.use(cookieParser("secret_passcode"));
+
+// express-sessionをミドルウェアとして使う
+router.use(expressSession({
+  secret: "secret_passcode",
+  cookie: { maxAge: 4000000 },
+  resave: false,
+  saveUninitialised: false
+}));
+
+// connect-flashをミドルウェアとして使う
+router.use(connectFlash());
+
+// connectFlashをレスポンスのフラッシュに割り当てるミドルウェアの設定
+router.use((req, res, next) => {
+  res.locals.flashMessages = req.flash();
+  next();
+});
+
 // 経路
 //   リクエストが来た時の反応をここでスイッチングしていく
 //   for index.ejs
-app.use("/", router);
-
 router.get("/", (req, res) => {
   // 初期状態の様子をみるため、ブラウザに文字列を送信する
   // res.send("Here is ROOT.");
   res.render("index");
 });
-
-// //   for cooking_course
-// router.get("/courses",
-//   offeredCoursesCtl.getAllCourses, (req, res, next) => {
-//     res.render("courses", { Offered_courses: req.data });
-//   }
-// );
 
 // for subscriber module
 router.get("/subscribers", subscribersCtl.index, subscribersCtl.indexView);
@@ -97,19 +118,6 @@ router.get("/subscribers/:id", subscribersCtl.show, subscribersCtl.showView);
 router.get("/subscribers/:id/edit", subscribersCtl.edit);
 router.put("/subscribers/:id/update", subscribersCtl.update, subscribersCtl.redirectView);
 router.delete("/subscribers/:id/delete", subscribersCtl.delete, subscribersCtl.redirectView);
-
-// //   for contact-FORM フォームへの記入ページ
-// //     1行目は、express-ejs-layoutsで場所を特定している
-// router.get("/contact", subscribersCtl.getSubscriberPage);
-// //   for contact-POST 投稿とその後の振る舞い
-// router.post("/thanks", subscribersCtl.saveSubscriber);
-// //   for contact-LIST フォームで集めた全データをリストで見せる
-// router.get("/subscribers/new", subscribersCtl.new);
-// router.get("/subscribers", 
-//   subscribersCtl.getAllSubscribers, (req, res, next) => {
-//           res.render("subscribers", { Subscribers: req.data }); 
-//         }
-// );
 
 // for user module
 // router.get("/users", usersCtl.index);
@@ -129,6 +137,8 @@ router.get("/courses/:id", coursesCtl.show, coursesCtl.showView);
 router.get("/courses/:id/edit", coursesCtl.edit);
 router.put("/courses/:id/update", coursesCtl.update, coursesCtl.redirectView);
 router.delete("/courses/:id/delete", coursesCtl.delete, coursesCtl.redirectView);
+
+app.use("/", router);
 
 // アプリがPORTを監視するための設定
 app.listen(app.get("port"), () => {
