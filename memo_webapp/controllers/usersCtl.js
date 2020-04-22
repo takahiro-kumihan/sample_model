@@ -14,6 +14,28 @@ const User = require("../models/user"),
   };
 
 module.exports = {
+  login: (req, res) => {
+    res.render("users/login");
+  },
+  authenticate: (req, res, next) => {
+    User.findOne({ email: req.body.email })
+    .then(user => {
+      if (user && user.password === req.body.password) {
+        res.locals.redirect = `/users/${ user._id }`;
+        req.flash("success", `${ user.fullName }さんはログインしました。`);
+        res.locals.user = user;
+        next();
+      } else {
+        req.flash("error",
+        "メールアドレスまたはパスワードが合致しませんでした。");
+        res.locals.redirect = "/users/login";
+        next();
+      }
+    })
+    .catch(err => {
+      console.log(`Error logging in user: ${ err.message }`);
+    });
+  },
   new: (req, res) => {
     res.render("users/new");
   },
@@ -111,7 +133,7 @@ module.exports = {
         next();
       })
       .catch((err) => {
-        console.log(`Error fetching users: ${err.message}`);
+        console.log(`Error fetching users: ${ err.message }`);
         next(err);
       });
   },
