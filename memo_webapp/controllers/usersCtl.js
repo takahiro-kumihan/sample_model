@@ -19,22 +19,46 @@ module.exports = {
   },
   authenticate: (req, res, next) => {
     User.findOne({ email: req.body.email })
-    .then(user => {
-      if (user && user.password === req.body.password) {
-        res.locals.redirect = `/users/${ user._id }`;
-        req.flash("success", `${ user.fullName }さんはログインしました。`);
-        res.locals.user = user;
-        next();
-      } else {
-        req.flash("error",
-        "メールアドレスまたはパスワードが合致しませんでした。");
-        res.locals.redirect = "/users/login";
-        next();
-      }
-    })
-    .catch(err => {
-      console.log(`Error logging in user: ${ err.message }`);
-    });
+      .then(user => {
+        if (user) {
+          user.pwCompare(req.body.password)
+            .then(pwMatch => {
+              if (pwMatch) {
+                res.locals.redirect = `/users/${ user._id }`;
+                req.flash("success",
+                  `${ user.fullName }さんがログインしました。`);
+                res.locals.user = user;
+              } else {
+                req.flash("error", "パスワードが違います。");
+                res.locals.redirect = "/users/login";
+              }
+              next();
+            });
+        } else {
+          req.flash("error",
+            "該当の会員が見つかりませんでした。");
+          res.locals.redirect = "/users/login"
+          next();
+        }
+      })
+      .catch(err => {
+        console.log(`Error logging in user: ${ err.message }`);
+        next(error);
+      });
+    // .then(user => {
+    //   if (user && user.password === req.body.password) {
+    //     res.locals.redirect = `/users/${ user._id }`;
+    //     req.flash("success",
+    //       `${ user.fullName }さんはログインしました。`);
+    //     res.locals.user = user;
+    //     next();
+    //   } else {
+    //     req.flash("error",
+    //       "メールアドレスまたはパスワードが合致しませんでした。");
+    //     res.locals.redirect = "/users/login";
+    //     next();
+    //   }
+    // })
   },
   new: (req, res) => {
     res.render("users/new");
@@ -141,19 +165,3 @@ module.exports = {
     res.render("users/index");
   }
 };
-
-// 上のコードは『locals』メソッドを使う場合。
-// module.exports = {
-//   index: (req, res) => {
-//     User.find({})
-//       .then(users => {
-//         res.render("users/index", {
-//           users: users
-//         })
-//       })
-//       .catch(err => {
-//         console.log(`Error fetching users: ${ err.message }`);
-//         res.redirect("/");
-//       });
-//   }
-// };
