@@ -33,7 +33,8 @@ userSchema = new Schema({
   zip_code: {
     type: Number,
     min: [1000, "Zip code too short"],
-    max: 9999
+    max: 9999,
+    required: true
   },
   password: {
     type: String,

@@ -48,7 +48,7 @@ module.exports = {
   },
   validate: (req, res, next) => {
     // emailフィールドの不要なスペースを除去する。
-    req.sanitaizeBody("email").normalizeEmail({ all_lowercase: true })
+    req.sanitizeBody("email").normalizeEmail({ all_lowercase: true })
       .trim();
     req.check("email", "このメールアドレスは無効です。 ")
       .notEmpty()
@@ -62,11 +62,11 @@ module.exports = {
     req.check("password", "パスワードを入力してください。")
       .notEmpty();
     // 以上のバリデーションの結果を集め以下の処理をする。
-    req.getValidateResult().then((err) => {
+    req.getValidationResult().then((err) => {
       if (!err.isEmpty()) {
         let messages = err.array().map(e => e.msg);
         req.skip = true;
-        req.flash("error", messages.join(" and "));
+        req.flash("error", messages.join(""));
         res.locals.redirect = "/users/new";
         next();
       } else {
