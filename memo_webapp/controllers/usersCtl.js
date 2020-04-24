@@ -17,7 +17,6 @@ module.exports = {
   login: (req, res) => {
     res.render("users/login");
   },
-
   authenticate: (req, res, next) => {
     User.findOne({ email: req.body.email })
       .then(user => {
@@ -47,28 +46,28 @@ module.exports = {
         next(error);
       });
   },
-  validate: (req, res, next) => {
-    // emailフィールドの不要なスペースを除去する。
-    req.body("email").normalizeEmail({ all_lowercase: true }).trim();
-    req.check("email", "このメールアドレスは無効です。 ").notEmpty().isEmail();
-    // zip_codeフィールドが空かどうかの検証。
-    req.check("zip_code", "この番号は無効です。")
-      .notEmpty().isInt().isLength({ min: 4, max: 4 })
-      .equals(req.body.zip_code);
-    req.check("password", "パスワードを入力してください。").notEmpty();
-    // 以上のバリデーションの結果を集め以下の処理をする。
-    req.getValidateResult().then((err) => {
-      if (!err.isEmpty()) {
-        let messages = err.array().map(e => e.msg);
-        req.skip = true;
-        req.flash("error", messages.join(" and "));
-        res.locals.redirect = "/users/new";
-        next();
-      } else {
-        next();
-      }
-    });
-  },
+  // validate: (req, res, next) => {
+  //   // emailフィールドの不要なスペースを除去する。
+  //   req.body("email").normalizeEmail({ all_lowercase: true }).trim();
+  //   req.check("email", "このメールアドレスは無効です。 ").notEmpty().isEmail();
+  //   // zip_codeフィールドが空かどうかの検証。
+  //   req.check("zip_code", "この番号は無効です。")
+  //     .notEmpty().isInt().isLength({ min: 4, max: 4 })
+  //     .equals(req.body.zip_code);
+  //   req.check("password", "パスワードを入力してください。").notEmpty();
+  //   // 以上のバリデーションの結果を集め以下の処理をする。
+  //   req.getValidateResult().then((err) => {
+  //     if (!err.isEmpty()) {
+  //       let messages = err.array().map(e => e.msg);
+  //       req.skip = true;
+  //       req.flash("error", messages.join(" and "));
+  //       res.locals.redirect = "/users/new";
+  //       next();
+  //     } else {
+  //       next();
+  //     }
+  //   });
+  // },
   new: (req, res) => {
     res.render("users/new");
   },
@@ -132,6 +131,7 @@ module.exports = {
         },
         email: req.body.email,
         password: req.body.password,
+        // password: pwUpdate(req.body.password),
         zip_code: req.body.zip_code,
       };
     User.findByIdAndUpdate(user_id, {
