@@ -104,6 +104,8 @@ router.use((req, res, next) => {
 // // express-validatorをロードする。
 // // ロードしたexpress-validatorをルーターに知らせる場所は、
 // // URLエンコーディングとJSONパラメータの処理後にすること。
+const expressValidator = require('express-validator');
+router.use(expressValidator());
 // const { buildSanitizeFunction } = require('express-validator');
 // const sanitizeBodyAndQuery = buildSanitizeFunction(['body', 'query']);
 // router.use(sanitizeBodyAndQuery());
