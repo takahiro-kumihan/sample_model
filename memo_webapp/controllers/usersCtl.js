@@ -48,13 +48,19 @@ module.exports = {
   },
   validate: (req, res, next) => {
     // emailフィールドの不要なスペースを除去する。
-    req.sanitaizeBody("email").normalizeEmail({ all_lowercase: true }).trim();
-    req.check("email", "このメールアドレスは無効です。 ").notEmpty().isEmail();
+    req.sanitaizeBody("email").normalizeEmail({ all_lowercase: true })
+      .trim();
+    req.check("email", "このメールアドレスは無効です。 ")
+      .notEmpty()
+      .isEmail();
     // zip_codeフィールドが空かどうかの検証。
     req.check("zip_code", "この番号は無効です。")
-      .notEmpty().isInt().isLength({ min: 4, max: 4 })
+      .notEmpty()
+      .isInt()
+      .isLength({ min: 4, max: 4 })
       .equals(req.body.zip_code);
-    req.check("password", "パスワードを入力してください。").notEmpty();
+    req.check("password", "パスワードを入力してください。")
+      .notEmpty();
     // 以上のバリデーションの結果を集め以下の処理をする。
     req.getValidateResult().then((err) => {
       if (!err.isEmpty()) {
