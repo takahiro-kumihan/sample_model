@@ -90,5 +90,10 @@ userSchema.methods.pwCompare = function(inputPw) {
   return bcrypt.compare(inputPw, user.password);
 };
 
+userSchema.methods.pwUpdate = function(inputPw) {
+  let user = this;
+  return inputPw = user.password;
+};
+
 // module
 module.exports = mongoose.model("User", userSchema);
