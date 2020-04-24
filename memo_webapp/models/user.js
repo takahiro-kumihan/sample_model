@@ -26,14 +26,14 @@ userSchema = new Schema({
   },
   email: {
     type: String,
-    required: true,
-    lowercase: true,
+    // required: true,
+    // lowercase: true,
     unique: true
   },
   zip_code: {
     type: Number,
-    min: [1000, "Zip code too short"],
-    max: 9999
+    // min: [1000, "Zip code too short"],
+    // max: 9999
   },
   password: {
     type: String,
