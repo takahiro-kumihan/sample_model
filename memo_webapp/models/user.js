@@ -1,6 +1,6 @@
 "use strict";
 
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
 
 // 接続に成功したら後で削除する行
 // const Subscriber = require("./subscriber")
