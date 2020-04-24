@@ -104,6 +104,8 @@ router.use((req, res, next) => {
 // // express-validatorをロードする。
 // // ロードしたexpress-validatorをルーターに知らせる場所は、
 // // URLエンコーディングとJSONパラメータの処理後にすること。
+const expressValidator = require('express-validator');
+router.use(expressValidator());
 // const { buildSanitizeFunction } = require('express-validator');
 // const sanitizeBodyAndQuery = buildSanitizeFunction(['body', 'query']);
 // router.use(sanitizeBodyAndQuery());
@@ -132,8 +134,7 @@ router.get("/users/login", usersCtl.login);
 router.post("/users/login", usersCtl.authenticate, usersCtl.redirectView);
 router.get("/users", usersCtl.index, usersCtl.indexView);
 router.get("/users/new", usersCtl.new);
-router.post("/users/create", usersCtl.create, usersCtl.redirectView);
-// router.post("/users/create", usersCtl.validate, usersCtl.create, usersCtl.redirectView);
+router.post("/users/create", usersCtl.validate, usersCtl.create, usersCtl.redirectView);
 router.get("/users/:id", usersCtl.show, usersCtl.showView);
 router.get("/users/:id/edit", usersCtl.edit);
 router.put("/users/:id/update", usersCtl.update, usersCtl.redirectView);
