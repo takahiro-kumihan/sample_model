@@ -1,11 +1,7 @@
-"use strict";
-
-// expressをロードする。
 const express = require("express"),
       app = express(),
       router = express.Router();
 
-// portの確保（オプション--環境変数で指定がなければ3000番を使う。）
 app.set("port", process.env.PORT || 3000);
 
 // 本文の解析で、
@@ -129,7 +125,6 @@ router.delete("/subscribers/:id/delete", subscribersCtl.delete, subscribersCtl.r
 
 app.use("/", router);
 
-// アプリがPORTを監視するための設定
 app.listen(app.get("port"), () => {
-  console.log(`サーバーはhttp://localhost:${ app.get("port") }で起動しています。`);
+  console.log(`サーバーはhttp://localhost:${app.get("port")}で起動しています。`);
 });
