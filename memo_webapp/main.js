@@ -2,7 +2,6 @@
 
 // expressをロードする。
 const express = require("express"),
-      // expressをインスタンスとして保持する。
       app = express(),
       router = express.Router();
 
@@ -11,7 +10,6 @@ app.set("port", process.env.PORT || 3000);
 
 // 本文の解析で、
 // URLエンコーディングとJSONパラメータの処理を行う。
-// ///////////////////////////////////////////////全然理解してない箇所
 router.use(express.urlencoded({ extended: false }));
 router.use(express.json());
 
@@ -28,8 +26,6 @@ mongoose.connect(
     useNewUrlParser: true });
   mongoose.set("useCreateIndex", true);
   mongoose.set('useFindAndModify', false);
-
-
   //   mongoDBへ該当のDBを接続
   const db = mongoose.connection;
   //   接続確認のログを出力する
@@ -42,30 +38,28 @@ mongoose.connect(
 mongoose.Promise = global.Promise;
 
 // 静的ファイルの関連付け
-//   イメージ、CSS ファイル、JavaScript ファイルなどの
-//   静的ファイルを提供するには、Express に標準実装されている
-//   express.static ミドルウェア関数を使用する。
+//   イメージ、CSS ファイル、JavaScript ファイルなどの静的ファイルを提供するには、
+//   Express に標準実装されている express.static ミドルウェア関数を使用する。
 //   静的アセットファイルを格納しているディレクトリーの名前を
-//   express.static ミドルウェア関数に渡して、
-//   ファイルの直接提供を開始する。
+//   express.static ミドルウェア関数に渡してファイルの直接提供を開始する。
 router.use(express.static("assets"));
 
 // レイアウト
 //   viewに関連するファイルの経路の起点となるディレクトリを有効にする
 const layouts = require("express-ejs-layouts");
-//   ejs形式ファイルの使用を設定
+//   ejs形式ファイルの使用を設定する。
 app.set("view engine", "ejs");
-//   express-ejs-layoutsモジュールを使うことを宣言する
+//   express-ejs-layoutsモジュールを使うことを宣言する。
 //   viewsディレクトリにファイルを配置する
-//   レイアウトのための設計図であるlayout.ejsが必須
+//   レイアウトの設計図、ファイル名は『layout.ejs』とする。
 router.use(layouts);
 
-// controllerのメソッドをロードする    
+// controllerのメソッドをロードする。
 const coursesCtl = require("./controllers/coursesCtl");
 const subscribersCtl = require("./controllers/subscribersCtl");
 const usersCtl = require("./controllers/usersCtl");
 
-// PUTメソッドをエミュレートするためのモジュールをロードする
+// 『PUTメソッド』をエミュレートするためのモジュールをロードする。
 const methodOverride = require("method-override");
 router.use(methodOverride("_method", {
   methods: ["POST", "GET"]
@@ -76,39 +70,26 @@ router.use(methodOverride("_method", {
 // 罠　罠　罠　
 // 置き場所が経路より先にしておかないと
 // 『flashaMessage』インスタンスをlayout.ejsへ
-// 持っていけない
+// 持っていけない。
 const expressSession = require("express-session"),
   cookieParser = require("cookie-parser"),
   connectFlash = require("connect-flash");
-
-// cookie-parserをミドルウェアとして使う
+// cookie-parserをミドルウェアとして使う。
 router.use(cookieParser("secret_passcode"));
-
-// express-sessionをミドルウェアとして使う
+// express-sessionをミドルウェアとして使う。
 router.use(expressSession({
   secret: "secret_passcode",
   cookie: { maxAge: 4000000 },
   resave: false,
   saveUninitialised: false
 }));
-
 // connect-flashをミドルウェアとして使う
 router.use(connectFlash());
-
 // connectFlashをレスポンスのフラッシュに割り当てるミドルウェアの設定
 router.use((req, res, next) => {
   res.locals.flashMessages = req.flash();
   next();
 });
-
-// // express-validatorをロードする。
-// // ロードしたexpress-validatorをルーターに知らせる場所は、
-// // URLエンコーディングとJSONパラメータの処理後にすること。
-// const expressValidator = require('express-validator');
-// router.use(expressValidator());
-// const { buildSanitizeFunction } = require('express-validator');
-// const sanitizeBodyAndQuery = buildSanitizeFunction(['body', 'query']);
-// router.use(sanitizeBodyAndQuery());
 
 // 経路
 //   リクエストが来た時の反応をここでスイッチングしていく
@@ -119,24 +100,10 @@ router.get("/", (req, res) => {
   res.render("index");
 });
 
-// for subscriber module
-router.get("/subscribers", subscribersCtl.index, subscribersCtl.indexView);
-router.get("/subscribers/new", subscribersCtl.new);
-router.post("/subscribers/create", subscribersCtl.create, subscribersCtl.redirectView);
-router.get("/subscribers/:id", subscribersCtl.show, subscribersCtl.showView);
-router.get("/subscribers/:id/edit", subscribersCtl.edit);
-router.put("/subscribers/:id/update", subscribersCtl.update, subscribersCtl.redirectView);
-router.delete("/subscribers/:id/delete", subscribersCtl.delete, subscribersCtl.redirectView);
-
 // for user module
-// router.get("/users", usersCtl.index);
-// router.get("/users/login", usersCtl.login);
-// router.post("/users/login", usersCtl.redirectView);
-// router.post("/users/login", usersCtl.authenticate, usersCtl.redirectView);
 router.get("/users", usersCtl.index, usersCtl.indexView);
 router.get("/users/new", usersCtl.new);
 router.post("/users/create", usersCtl.create, usersCtl.redirectView);
-// router.post("/users/create", usersCtl.validate, usersCtl.create, usersCtl.redirectView);
 router.get("/users/:id", usersCtl.show, usersCtl.showView);
 router.get("/users/:id/edit", usersCtl.edit);
 router.put("/users/:id/update", usersCtl.update, usersCtl.redirectView);
@@ -150,6 +117,15 @@ router.get("/courses/:id", coursesCtl.show, coursesCtl.showView);
 router.get("/courses/:id/edit", coursesCtl.edit);
 router.put("/courses/:id/update", coursesCtl.update, coursesCtl.redirectView);
 router.delete("/courses/:id/delete", coursesCtl.delete, coursesCtl.redirectView);
+
+// for subscriber module
+router.get("/subscribers", subscribersCtl.index, subscribersCtl.indexView);
+router.get("/subscribers/new", subscribersCtl.new);
+router.post("/subscribers/create", subscribersCtl.create, subscribersCtl.redirectView);
+router.get("/subscribers/:id", subscribersCtl.show, subscribersCtl.showView);
+router.get("/subscribers/:id/edit", subscribersCtl.edit);
+router.put("/subscribers/:id/update", subscribersCtl.update, subscribersCtl.redirectView);
+router.delete("/subscribers/:id/delete", subscribersCtl.delete, subscribersCtl.redirectView);
 
 app.use("/", router);
 

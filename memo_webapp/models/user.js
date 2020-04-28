@@ -73,23 +73,5 @@ userSchema.pre("save", function (next) {
   }
 });
 
-// userSchema.pre("save", function (next) {
-//   let user = this;
-//   bcrypt.hash(user.password, 10)
-//     .then(hash => {
-//       user.password = hash;
-//       next();
-//     })
-//     .catch(err => {
-//       console.log(`Error in hashing password: ${err.message}`);
-//     });
-// });
-
-// // method
-// userSchema.methods.pwCompare = function(inputPw) {
-//   let user = this;
-//   return bcrypt.compare(inputPw, user.password);
-// };
-
 // module
 module.exports = mongoose.model("User", userSchema);
