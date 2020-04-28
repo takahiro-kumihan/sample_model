@@ -1,5 +1,5 @@
 // ///////////////////////////////
-// moduleのやり方
+// moduleを設定して送る
 
 // exports.PARAMS
 // exportsは、module.exporsの略

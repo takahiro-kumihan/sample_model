@@ -1,5 +1,5 @@
 // ///////////////////////////////
-// moduleのやり方
+// moduleを受ける
 let calc = require("./calc");
 
 console.log(calc.strings);
