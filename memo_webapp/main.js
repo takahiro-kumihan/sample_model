@@ -124,7 +124,6 @@ router.put("/subscribers/:id/update", subscribersCtl.update, subscribersCtl.redi
 router.delete("/subscribers/:id/delete", subscribersCtl.delete, subscribersCtl.redirectView);
 
 app.use("/", router);
->>>>>>> 2d125704f43dcc1c1fd0d208103c9dc9735a9291
 
 app.listen(app.get("port"), () => {
   console.log(`サーバーはhttp://localhost:${app.get("port")}で起動しています。`);
