@@ -1,6 +1,6 @@
 "use strict";
 
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
 
 // 接続に成功したら後で削除する行
 // const Subscriber = require("./subscriber")
@@ -73,23 +73,23 @@ userSchema.pre("save", function (next) {
   }
 });
 
-userSchema.pre("save", function (next) {
-  let user = this;
-  bcrypt.hash(user.password, 10)
-    .then(hash => {
-      user.password = hash;
-      next();
-    })
-    .catch(err => {
-      console.log(`Error in hashing password: ${err.message}`);
-    });
-});
+// userSchema.pre("save", function (next) {
+//   let user = this;
+//   bcrypt.hash(user.password, 10)
+//     .then(hash => {
+//       user.password = hash;
+//       next();
+//     })
+//     .catch(err => {
+//       console.log(`Error in hashing password: ${err.message}`);
+//     });
+// });
 
-// method
-userSchema.methods.pwCompare = function(inputPw) {
-  let user = this;
-  return bcrypt.compare(inputPw, user.password);
-};
+// // method
+// userSchema.methods.pwCompare = function(inputPw) {
+//   let user = this;
+//   return bcrypt.compare(inputPw, user.password);
+// };
 
 // module
 module.exports = mongoose.model("User", userSchema);
